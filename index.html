@@ -270,39 +270,33 @@
       color: var(--text-main);
       margin: 8px 0;
       line-height: 1.2;
-      display: flex;
+      display: inline-flex;
       align-items: baseline;
       justify-content: center;
-      gap: 2px;
     }
 
-    /* Perfektně zarovnaný rámeček v jedné linii s textem */
+    /* Dokonale zarovnané podtržení v lince textu */
     .blank {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 38px;
-      border-bottom: 4px solid var(--primary);
-      color: var(--primary);
-      background: #eff6ff;
-      border-radius: 6px;
+      display: inline-block;
+      width: 36px;
+      border-bottom: 5px solid var(--primary);
       margin: 0 4px;
-      vertical-align: baseline;
-      position: relative;
-      top: -2px;
+      text-align: center;
+      color: var(--primary);
     }
 
     .blank.correct {
       border-color: var(--success);
       color: var(--success);
       background: var(--success-bg);
+      border-radius: 4px;
     }
 
     .blank.wrong {
       border-color: var(--error);
       color: var(--error);
       background: var(--error-bg);
+      border-radius: 4px;
     }
 
     .sentence-hint {
@@ -840,7 +834,7 @@
       opt2.textContent = currentWord.pair[1];
       opt2.dataset.val = currentWord.pair[1];
 
-      wordDisplayEl.innerHTML = `${currentWord.before}<span class="blank" id="blankSlot"></span>${currentWord.after}`;
+      wordDisplayEl.innerHTML = `${currentWord.before}<span class="blank" id="blankSlot">&nbsp;</span>${currentWord.after}`;
       sentenceHintEl.innerHTML = currentWord.sentence;
     }
 

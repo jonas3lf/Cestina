@@ -231,7 +231,8 @@
     .blank {
       display: inline-block;
       min-width: 44px;
-      padding: 0 8px;
+      height: 44px;
+      vertical-align: middle;
       border-bottom: 4px solid var(--primary);
       color: var(--primary);
       background: #eff6ff;
@@ -481,7 +482,7 @@
       </div>
 
       <div id="quizArea" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px;">
-        <div class="word-display" id="wordDisplay">b<span class="blank">?</span>t</div>
+        <div class="word-display" id="wordDisplay">b<span class="blank"></span>t</div>
         <div class="sentence-hint" id="sentenceHint">Chci <strong>b_t</strong> dobrým kamarádem.</div>
 
         <div class="options-grid" id="optionsGrid">
@@ -527,7 +528,7 @@
       { letter: "B", before: "bab", after: "čka", ans: "i", sentence: "Moje <strong>bab_čka</strong> peče nejlepší buchty.", type: "Nevyjmenované slovo", rule: "Babička není vyjmenované ani příbuzné slovo." },
       { letter: "B", before: "b", after: "č", ans: "i", sentence: "Kočí práskl dlouhým <strong>b_čem</strong>.", type: "Nevyjmenované slovo", rule: "Bič není vyjmenované slovo, píšeme měkké i." },
       { letter: "B", before: "nab", after: "dka", ans: "í", sentence: "V obchodě mají výhodnou <strong>nab_dku</strong>.", type: "Nevyjmenované slovo", rule: "Nabídka (od nabízet) není vyjmenované slovo." },
-      { letter: "B", before: "odb", after: "rat", ans: "ě", sentence: "Musíme pravidelně <strong>odb_rat</strong> časopis.", type: "Nevyjmenované slovo", rule: "Odbírat (od brát) se píše s měkkým í." },
+      { letter: "B", before: "odb", after: "rat", ans: "í", sentence: "Musíme pravidelně <strong>odb_rat</strong> časopis.", type: "Nevyjmenované slovo", rule: "Odbírat (od brát) se píše s měkkým í." },
       { letter: "B", before: "nab", after: "zet", ans: "í", sentence: "Chci ti <strong>nab_zet</strong> svou pomoc.", type: "Nevyjmenované slovo", rule: "Nabízet není vyjmenované slovo." },
 
       // L
@@ -564,7 +565,6 @@
       { letter: "M", before: "chm", after: "ří", ans: "ý", sentence: "Z pampelišky odlétá bílé <strong>chm_ří</strong>.", type: "Vyjmenované slovo", rule: "Chmýří je vyjmenované slovo po M." },
       { letter: "M", before: "nachom", after: "tnout se", ans: "ý", sentence: "Náhodou se <strong>nachom_tl</strong> u té nehody.", type: "Vyjmenované slovo", rule: "Nachomýtnout se je vyjmenované slovo po M." },
       { letter: "M", before: "m", after: "sa", ans: "í", sentence: "Na stole stojí hluboká <strong>m_sa</strong> s ovocem.", type: "Nevyjmenované slovo", rule: "Mísa není vyjmenované slovo, píšeme měkké í." },
-      { letter: "M", before: "m", after: "lkovat", ans: "í", sentence: "Nesdílel to, odmítl to <strong>m_lkovat</strong>.", type: "Nevyjmenované slovo", rule: "Míč není vyjmenované slovo." },
       { letter: "M", before: "m", after: "č", ans: "í", sentence: "Kluci si na hřišti kopou s <strong>m_čem</strong>.", type: "Nevyjmenované slovo", rule: "Míč není vyjmenované slovo, píšeme měkké í." },
 
       // P
@@ -755,7 +755,7 @@
         currentWord = next;
       }
 
-      wordDisplayEl.innerHTML = `${currentWord.before}<span class="blank" id="blankSlot">?</span>${currentWord.after}`;
+      wordDisplayEl.innerHTML = `${currentWord.before}<span class="blank" id="blankSlot"></span>${currentWord.after}`;
       sentenceHintEl.innerHTML = currentWord.sentence;
     }
 

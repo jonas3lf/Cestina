@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Hravá čeština – Vyjmenovaná slova</title>
   
-  <!-- Nastavení ikony na plochu (iOS & Android) -->
+  <!-- Ikona na plochu (iOS & Android) -->
   <link rel="apple-touch-icon" href="iconC.png">
   <link rel="icon" type="image/png" sizes="192x192" href="iconC.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -454,11 +454,11 @@
 
     <section class="controls">
       <div class="mode-switch">
-        <button class="mode-btn active" data-mode="practice">♾️ Volný trénink</button>
-        <button class="mode-btn" data-mode="challenge">🏆 Výzva (10 slov)</button>
+        <button class="mode-btn active" data-mode="practice">♾️ Trénink</button>
+        <button class="mode-btn" data-mode="challenge">🏆 Výzva (10)</button>
       </div>
       <div class="letters-grid" id="lettersGrid">
-        <button class="letter-btn active" data-letter="ALL">Mix všech</button>
+        <button class="letter-btn active" data-letter="ALL">Vše</button>
         <button class="letter-btn" data-letter="B">B</button>
         <button class="letter-btn" data-letter="L">L</button>
         <button class="letter-btn" data-letter="M">M</button>
@@ -621,21 +621,18 @@
       { letter: "Z", before: "z", after: "vat", ans: "í", sentence: "Když jsi unavený, začneš <strong>z_vat</strong>.", type: "Nevyjmenované slovo", rule: "Zívat není vyjmenované slovo, píšeme měkké í." }
     ];
 
-    // Stav aplikace
-    let currentMode = 'practice'; // 'practice' | 'challenge'
+    let currentMode = 'practice';
     let currentLetter = 'ALL';
     let currentWord = null;
     let stars = parseInt(localStorage.getItem('cz_stars') || '0', 10);
     let soundEnabled = true;
 
-    // Stav pro výzvu (10 slov)
     let challengePool = [];
     let challengeIndex = 0;
     let challengeCorrect = 0;
     let challengeMistakes = [];
     const CHALLENGE_LENGTH = 10;
 
-    // DOM prvky
     const starCountEl = document.getElementById('starCount');
     const soundToggleBtn = document.getElementById('soundToggle');
     const modeBtns = document.querySelectorAll('.mode-btn');
@@ -660,7 +657,6 @@
 
     starCountEl.textContent = stars;
 
-    // Zvukové efekty pomocí Web Audio API
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     function playSound(type) {
       if (!soundEnabled) return;
@@ -673,8 +669,8 @@
       const now = audioCtx.currentTime;
       if (type === 'success') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now); // C5
-        osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
         gain.gain.setValueAtTime(0.15, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
         osc.start(now);
@@ -775,7 +771,7 @@
         starCountEl.textContent = stars;
 
         feedbackBox.className = 'feedback-box success show';
-        feedbackTitle.innerHTML = `✅ Skvěle! (${currentWord.type})`;
+        feedbackTitle.innerHTML = `✅ Správně! (${currentWord.type})`;
         feedbackDesc.textContent = currentWord.rule;
 
         if (currentMode === 'challenge') {
@@ -788,7 +784,7 @@
         playSound('error');
 
         feedbackBox.className = 'feedback-box error show';
-        feedbackTitle.innerHTML = `❌ Pozor, správně je „${currentWord.before}${currentWord.ans}${currentWord.after}“`;
+        feedbackTitle.innerHTML = `❌ Chyba, správně je „${currentWord.before}${currentWord.ans}${currentWord.after}“`;
         feedbackDesc.textContent = `${currentWord.type}: ${currentWord.rule}`;
 
         if (currentMode === 'challenge') {
@@ -817,11 +813,11 @@
       finalScoreEl.textContent = `${challengeCorrect}/${CHALLENGE_LENGTH}`;
 
       if (challengeCorrect === 10) {
-        summaryMessageEl.textContent = 'Absolutní jednička! Jsi mistr vyjmenovaných slov! 🌟';
+        summaryMessageEl.textContent = 'Skvělé! Všechno máš správně! 🌟';
       } else if (challengeCorrect >= 7) {
-        summaryMessageEl.textContent = 'Velmi dobrá práce! Už ti chybí jen kousek k dokonalosti.';
+        summaryMessageEl.textContent = 'Moc pěkný výsledek!';
       } else {
-        summaryMessageEl.textContent = 'Dobrý trénink! Zkus si projít chybičky níže a dej si další kolo.';
+        summaryMessageEl.textContent = 'Trénink dělá mistra, zkus to znovu!';
       }
 
       mistakesListEl.innerHTML = '';
@@ -829,7 +825,7 @@
         const title = document.createElement('div');
         title.style.fontWeight = '700';
         title.style.marginTop = '4px';
-        title.textContent = 'Co si ještě procvičit:';
+        title.textContent = 'Chyby k procvičení:';
         mistakesListEl.appendChild(title);
 
         challengeMistakes.forEach(m => {
@@ -876,7 +872,6 @@
       });
     });
 
-    // Spuštění
     loadNextWord();
   </script>
 </body>

@@ -270,9 +270,13 @@
       color: var(--text-main);
       margin: 8px 0;
       line-height: 1.2;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 2px;
     }
 
-    /* Zarovnání rámečku přesně s textem */
+    /* Opravené zarovnání rámečku přesně s účařím textu */
     .blank {
       display: inline-flex;
       align-items: center;
@@ -284,8 +288,7 @@
       background: #eff6ff;
       border-radius: 8px;
       margin: 0 4px;
-      position: relative;
-      top: -2px;
+      vertical-align: baseline;
     }
 
     .blank.correct {
@@ -605,7 +608,7 @@
       { letter: "L", before: "l", after: "tko", ans: "ý", pair: ["ý", "í"], sentence: "Po běhání mě bolí pravé <strong>l_tko</strong>.", type: "Vyjmenované slovo", rule: "Lýtko je vyjmenované slovo po L." },
       { letter: "L", before: "l", after: "ko", ans: "ý", pair: ["ý", "í"], sentence: "Z lipového <strong>l_ka</strong> se pletou košíky.", type: "Vyjmenované slovo", rule: "Lýko je vyjmenované slovo po L." },
       { letter: "L", before: "l", after: "že", ans: "y", pair: ["y", "i"], sentence: "V zimě jezdíme na hory na <strong>l_že</strong>.", type: "Vyjmenované slovo", rule: "Lyže je vyjmenované slovo po L." },
-      { letter: "L", before: "pel", after: "ň", ans: "y", pair: ["y", "i"], sentence: "Na kraji cesty roste hořký <strong>pel_něk</strong>.", type: "Vyjmenované slovo", rule: "Pelyněk je vyjmenované slovo po L." },
+      { letter: "L", before: "pelyň", after: "k", ans: "ě", pair: ["ě", "e"], sentence: "Na kraji cesty roste hořký pelyň<strong>_</strong>k.", type: "Vyjmenované slovo", rule: "Pelyněk je vyjmenované slovo po L." },
       { letter: "L", before: "l", after: "st", ans: "i", pair: ["y", "i"], sentence: "Na podzim padá ze stromů barevné <strong>l_stí</strong>.", type: "Nevyjmenované slovo", rule: "List není vyjmenované slovo." },
       { letter: "L", before: "l", after: "ce", ans: "í", pair: ["ý", "í"], sentence: "Polévku jíš velkou <strong>l_cí</strong>.", type: "Nevyjmenované slovo", rule: "Lžíce není vyjmenované slovo." },
       { letter: "L", before: "ml", after: "vis", ans: "í", pair: ["ý", "í"], sentence: "Starý pan učitel už trochu <strong>ml_ví</strong>?", type: "Nevyjmenované slovo", rule: "Mluvit není vyjmenované slovo, píšeme měkké í." },

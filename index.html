@@ -454,11 +454,11 @@
 
     <section class="controls">
       <div class="mode-switch">
-        <button class="mode-btn active" data-mode="practice">♾️ Trénink</button>
-        <button class="mode-btn" data-mode="challenge">🏆 Výzva (10)</button>
+        <button class="mode-btn active" data-mode="practice">♾️ Volný trénink</button>
+        <button class="mode-btn" data-mode="challenge">🏆 Výzva (10 slov)</button>
       </div>
       <div class="letters-grid" id="lettersGrid">
-        <button class="letter-btn active" data-letter="ALL">Vše</button>
+        <button class="letter-btn active" data-letter="ALL">Mix všech</button>
         <button class="letter-btn" data-letter="B">B</button>
         <button class="letter-btn" data-letter="L">L</button>
         <button class="letter-btn" data-letter="M">M</button>
@@ -527,6 +527,8 @@
       { letter: "B", before: "bab", after: "čka", ans: "i", sentence: "Moje <strong>bab_čka</strong> peče nejlepší buchty.", type: "Nevyjmenované slovo", rule: "Babička není vyjmenované ani příbuzné slovo." },
       { letter: "B", before: "b", after: "č", ans: "i", sentence: "Kočí práskl dlouhým <strong>b_čem</strong>.", type: "Nevyjmenované slovo", rule: "Bič není vyjmenované slovo, píšeme měkké i." },
       { letter: "B", before: "nab", after: "dka", ans: "í", sentence: "V obchodě mají výhodnou <strong>nab_dku</strong>.", type: "Nevyjmenované slovo", rule: "Nabídka (od nabízet) není vyjmenované slovo." },
+      { letter: "B", before: "odb", after: "rat", ans: "ě", sentence: "Musíme pravidelně <strong>odb_rat</strong> časopis.", type: "Nevyjmenované slovo", rule: "Odbírat (od brát) se píše s měkkým í." },
+      { letter: "B", before: "nab", after: "zet", ans: "í", sentence: "Chci ti <strong>nab_zet</strong> svou pomoc.", type: "Nevyjmenované slovo", rule: "Nabízet není vyjmenované slovo." },
 
       // L
       { letter: "L", before: "sl", after: "šet", ans: "y", sentence: "Z dálky je <strong>sl_šet</strong> zpěv ptáků.", type: "Vyjmenované slovo", rule: "Slyšet je vyjmenované slovo po L." },
@@ -544,6 +546,7 @@
       { letter: "L", before: "l", after: "že", ans: "y", sentence: "V zimě jezdíme na hory na <strong>l_že</strong>.", type: "Vyjmenované slovo", rule: "Lyže je vyjmenované slovo po L." },
       { letter: "L", before: "pel", after: "ň", ans: "y", sentence: "Na kraji cesty roste hořký <strong>pel_něk</strong>.", type: "Vyjmenované slovo", rule: "Pelyněk je vyjmenované slovo po L." },
       { letter: "L", before: "l", after: "st", ans: "i", sentence: "Na podzim padá ze stromů barevné <strong>l_stí</strong>.", type: "Nevyjmenované slovo", rule: "List není vyjmenované slovo, píšeme měkké i." },
+      { letter: "L", before: "l", after: "ce", ans: "í", sentence: "Polévku jíš velkou <strong>l_cí</strong>.", type: "Nevyjmenované slovo", rule: "Lžíce není vyjmenované slovo, píšeme měkké í." },
 
       // M
       { letter: "M", before: "m", after: "t", ans: "ý", sentence: "Před jídlem si musíme <strong>m_t</strong> ruce.", type: "Vyjmenované slovo", rule: "Mýt (umývat vodou) je vyjmenované slovo po M." },
@@ -561,6 +564,8 @@
       { letter: "M", before: "chm", after: "ří", ans: "ý", sentence: "Z pampelišky odlétá bílé <strong>chm_ří</strong>.", type: "Vyjmenované slovo", rule: "Chmýří je vyjmenované slovo po M." },
       { letter: "M", before: "nachom", after: "tnout se", ans: "ý", sentence: "Náhodou se <strong>nachom_tl</strong> u té nehody.", type: "Vyjmenované slovo", rule: "Nachomýtnout se je vyjmenované slovo po M." },
       { letter: "M", before: "m", after: "sa", ans: "í", sentence: "Na stole stojí hluboká <strong>m_sa</strong> s ovocem.", type: "Nevyjmenované slovo", rule: "Mísa není vyjmenované slovo, píšeme měkké í." },
+      { letter: "M", before: "m", after: "lkovat", ans: "í", sentence: "Nesdílel to, odmítl to <strong>m_lkovat</strong>.", type: "Nevyjmenované slovo", rule: "Míč není vyjmenované slovo." },
+      { letter: "M", before: "m", after: "č", ans: "í", sentence: "Kluci si na hřišti kopou s <strong>m_čem</strong>.", type: "Nevyjmenované slovo", rule: "Míč není vyjmenované slovo, píšeme měkké í." },
 
       // P
       { letter: "P", before: "p", after: "cha", ans: "ý", sentence: "<strong>P_cha</strong> předchází pád.", type: "Vyjmenované slovo", rule: "Pýcha je vyjmenované slovo po P." },
@@ -580,6 +585,7 @@
       { letter: "P", before: "p", after: "r", ans: "ý", sentence: "V trávě roste nepříjemný plevel <strong>p_r</strong>.", type: "Vyjmenované slovo", rule: "Pýr je vyjmenované slovo po P." },
       { letter: "P", before: "p", after: "řit se", ans: "ý", sentence: "Když se stydí, začne se hned <strong>p_řit</strong>.", type: "Vyjmenované slovo", rule: "Pýřit se je vyjmenované slovo po P." },
       { letter: "P", before: "čep", after: "řit se", ans: "ý", sentence: "Krocan se na dvoře pyšně <strong>čep_ří</strong>.", type: "Vyjmenované slovo", rule: "Čepýřit se je vyjmenované slovo po P." },
+      { letter: "P", before: "p", after: "rčka", ans: "í", sentence: "Bolelo mě v krku, tak jsem dostal <strong>p_rčku</strong> od doktora.", type: "Nevyjmenované slovo", rule: "Píšťalka ani pilulka nejsou vyjmenovaná slova." },
 
       // S
       { letter: "S", before: "s", after: "n", ans: "y", sentence: "Náš <strong>s_n</strong> chodí do třetí třídy.", type: "Vyjmenované slovo", rule: "Syn je vyjmenované slovo po S." },
@@ -595,6 +601,7 @@
       { letter: "S", before: "s", after: "čet", ans: "y", sentence: "Had hlasitě <strong>s_čel</strong> v trávě.", type: "Vyjmenované slovo", rule: "Syčet je vyjmenované slovo po S." },
       { letter: "S", before: "s", after: "pat", ans: "y", sentence: "Zedník začal <strong>s_pat</strong> písek na hromadu.", type: "Vyjmenované slovo", rule: "Sypat je vyjmenované slovo po S." },
       { letter: "S", before: "s", after: "tko", ans: "í", sentence: "Čaj přecedíme přes jemné <strong>s_tko</strong>.", type: "Nevyjmenované slovo", rule: "Sítko (síto) není vyjmenované slovo, píšeme měkké í." },
+      { letter: "S", before: "s", after: "la", ans: "í", sentence: "V divadle jsme seděli v první <strong>s_le</strong>.", type: "Nevyjmenované slovo", rule: "Síla / sál není vyjmenované slovo." },
 
       // V
       { letter: "V", before: "v", after: "soký", ans: "y", sentence: "V lese rostou <strong>v_soké</strong> smrky.", type: "Vyjmenované slovo", rule: "Vysoký je vyjmenované slovo po V." },
@@ -611,6 +618,7 @@
       { letter: "V", before: "pov", after: "k", ans: "y", sentence: "Děti dělaly o přestávce velký <strong>pov_k</strong>.", type: "Vyjmenované slovo", rule: "Povyk je vyjmenované slovo po V." },
       { letter: "V", before: "v", after: "heň", ans: "ý", sentence: "Kovář rozfoukal oheň ve <strong>v_hni</strong>.", type: "Vyjmenované slovo", rule: "Výheň je vyjmenované slovo po V." },
       { letter: "V", before: "v", after: "tr", ans: "í", sentence: "Venku fouká silný podzimní <strong>v_tr</strong>.", type: "Nevyjmenované slovo", rule: "Vítr není vyjmenované slovo, píšeme měkké í." },
+      { letter: "V", before: "v", after: "tah", ans: "í", sentence: "Magistrála má nový silniční <strong>v_tah</strong>?", type: "Nevyjmenované slovo", rule: "Výtah / výtěžek – pozor na slova začínající předponou vy-." },
 
       // Z
       { letter: "Z", before: "brz", after: "", ans: "y", sentence: "Přijď <strong>brz_</strong> domů, ať nezmokneš!", type: "Vyjmenované slovo", rule: "Brzy je vyjmenované slovo po Z." },
@@ -621,7 +629,7 @@
       { letter: "Z", before: "z", after: "vat", ans: "í", sentence: "Když jsi unavený, začneš <strong>z_vat</strong>.", type: "Nevyjmenované slovo", rule: "Zívat není vyjmenované slovo, píšeme měkké í." }
     ];
 
-    let currentMode = 'practice';
+    let currentMode = 'practice'; // 'practice' | 'challenge'
     let currentLetter = 'ALL';
     let currentWord = null;
     let stars = parseInt(localStorage.getItem('cz_stars') || '0', 10);
@@ -771,7 +779,7 @@
         starCountEl.textContent = stars;
 
         feedbackBox.className = 'feedback-box success show';
-        feedbackTitle.innerHTML = `✅ Správně! (${currentWord.type})`;
+        feedbackTitle.innerHTML = `✅ Skvěle! (${currentWord.type})`;
         feedbackDesc.textContent = currentWord.rule;
 
         if (currentMode === 'challenge') {
@@ -784,7 +792,7 @@
         playSound('error');
 
         feedbackBox.className = 'feedback-box error show';
-        feedbackTitle.innerHTML = `❌ Chyba, správně je „${currentWord.before}${currentWord.ans}${currentWord.after}“`;
+        feedbackTitle.innerHTML = `❌ Pozor, správně je „${currentWord.before}${currentWord.ans}${currentWord.after}“`;
         feedbackDesc.textContent = `${currentWord.type}: ${currentWord.rule}`;
 
         if (currentMode === 'challenge') {
@@ -813,11 +821,11 @@
       finalScoreEl.textContent = `${challengeCorrect}/${CHALLENGE_LENGTH}`;
 
       if (challengeCorrect === 10) {
-        summaryMessageEl.textContent = 'Skvělé! Všechno máš správně! 🌟';
+        summaryMessageEl.textContent = 'Absolutní jednička! Jsi mistr vyjmenovaných slov! 🌟';
       } else if (challengeCorrect >= 7) {
-        summaryMessageEl.textContent = 'Moc pěkný výsledek!';
+        summaryMessageEl.textContent = 'Velmi dobrá práce! Už ti chybí jen kousek k dokonalosti.';
       } else {
-        summaryMessageEl.textContent = 'Trénink dělá mistra, zkus to znovu!';
+        summaryMessageEl.textContent = 'Dobrý trénink! Zkus si projít chybičky níže a dej si další kolo.';
       }
 
       mistakesListEl.innerHTML = '';
@@ -825,7 +833,7 @@
         const title = document.createElement('div');
         title.style.fontWeight = '700';
         title.style.marginTop = '4px';
-        title.textContent = 'Chyby k procvičení:';
+        title.textContent = 'Co si ještě procvičit:';
         mistakesListEl.appendChild(title);
 
         challengeMistakes.forEach(m => {

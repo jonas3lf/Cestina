@@ -276,19 +276,21 @@
       gap: 2px;
     }
 
-    /* Opravené zarovnání rámečku přesně s účařím textu */
+    /* Perfektně zarovnaný rámeček v jedné linii s textem */
     .blank {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 44px;
-      height: 44px;
+      width: 44px;
+      height: 38px;
       border-bottom: 4px solid var(--primary);
       color: var(--primary);
       background: #eff6ff;
-      border-radius: 8px;
+      border-radius: 6px;
       margin: 0 4px;
       vertical-align: baseline;
+      position: relative;
+      top: -2px;
     }
 
     .blank.correct {

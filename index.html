@@ -1,961 +1,570 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hravá čeština – Vyjmenovaná slova</title>
-  
-  <!-- Ikona na plochu (iOS & Android) -->
-  <link rel="apple-touch-icon" href="iconC.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="iconC.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Čeština">
-
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
-      --card-bg: #ffffff;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --success: #16a34a;
-      --success-bg: #dcfce7;
-      --error: #dc2626;
-      --error-bg: #fee2e2;
-      --warning: #f59e0b;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px;
-    }
-
-    .app-container {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    /* Horní lišta */
-    header {
-      background: var(--card-bg);
-      padding: 14px 20px;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .stats {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .star-badge {
-      background: #fef3c7;
-      color: #b45309;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .sound-btn {
-      background: #f1f5f9;
-      border: none;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s;
-    }
-
-    .sound-btn:active {
-      transform: scale(0.92);
-    }
-
-    /* Úvodní stránka (Menu) */
-    .home-screen {
-      background: var(--card-bg);
-      padding: 32px 20px;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .home-screen h1 {
-      font-size: 1.8rem;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-
-    .home-screen p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-
-    .menu-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 18px;
-      border-radius: 18px;
-      font-size: 1.2rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #1e40af;
-      transition: all 0.15s;
-    }
-
-    .menu-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #1e40af;
-    }
-
-    /* Ovládací panel - režim a písmena */
-    .controls {
-      background: var(--card-bg);
-      padding: 16px;
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .mode-switch {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: #f1f5f9;
-      padding: 4px;
-      border-radius: 12px;
-      gap: 4px;
-    }
-
-    .mode-btn {
-      border: none;
-      padding: 8px 12px;
-      border-radius: 9px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-muted);
-      transition: all 0.2s;
-    }
-
-    .mode-btn.active {
-      background: var(--card-bg);
-      color: var(--primary);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    }
-
-    .letters-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-    }
-
-    .letter-btn {
-      border: 2px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text-main);
-      font-weight: 800;
-      font-size: 0.95rem;
-      padding: 6px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .letter-btn.active {
-      border-color: var(--primary);
-      background: #eff6ff;
-      color: var(--primary);
-    }
-
-    /* Hlavní herní karta */
-    .game-card {
-      background: var(--card-bg);
-      padding: 28px 20px;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-bar-wrap {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 8px;
-      background: #f1f5f9;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .word-display {
-      font-size: 2.6rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--text-main);
-      margin: 8px 0;
-      line-height: 1.2;
-      display: inline-flex;
-      align-items: baseline;
-      justify-content: center;
-    }
-
-    /* Dokonale zarovnané podtržení v lince textu */
-    .blank {
-      display: inline-block;
-      width: 36px;
-      border-bottom: 5px solid var(--primary);
-      margin: 0 4px;
-      text-align: center;
-      color: var(--primary);
-    }
-
-    .blank.correct {
-      border-color: var(--success);
-      color: var(--success);
-      background: var(--success-bg);
-      border-radius: 4px;
-    }
-
-    .blank.wrong {
-      border-color: var(--error);
-      color: var(--error);
-      background: var(--error-bg);
-      border-radius: 4px;
-    }
-
-    .sentence-hint {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      padding: 12px 16px;
-      border-radius: 14px;
-      font-size: 1.05rem;
-      color: #334155;
-      line-height: 1.4;
-      width: 100%;
-    }
-
-    /* Tlačítka na výběr ze 2 možností */
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      width: 100%;
-      max-width: 320px;
-    }
-
-    .option-btn {
-      background: #f8fafc;
-      border: 2px solid #cbd5e1;
-      border-radius: 16px;
-      padding: 16px 0;
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: all 0.15s;
-      box-shadow: 0 4px 0 #cbd5e1;
-    }
-
-    .option-btn:hover:not(:disabled) {
-      background: #eff6ff;
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 var(--primary);
-    }
-
-    .option-btn:active:not(:disabled) {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 #cbd5e1;
-    }
-
-    .option-btn:disabled {
-      cursor: default;
-      opacity: 0.7;
-    }
-
-    .option-btn.btn-correct {
-      background: var(--success);
-      border-color: #15803d;
-      color: white;
-      box-shadow: 0 4px 0 #15803d;
-      opacity: 1;
-    }
-
-    .option-btn.btn-wrong {
-      background: var(--error);
-      border-color: #b91c1c;
-      color: white;
-      box-shadow: 0 4px 0 #b91c1c;
-      opacity: 1;
-    }
-
-    /* Zpětná vazba a vysvětlení */
-    .feedback-box {
-      width: 100%;
-      padding: 16px;
-      border-radius: 16px;
-      text-align: left;
-      display: none;
-      flex-direction: column;
-      gap: 6px;
-      animation: fadeIn 0.25s ease;
-    }
-
-    .feedback-box.show {
-      display: flex;
-    }
-
-    .feedback-box.success {
-      background: var(--success-bg);
-      border: 1px solid #86efac;
-      color: #14532d;
-    }
-
-    .feedback-box.error {
-      background: var(--error-bg);
-      border: 1px solid #fca5a5;
-      color: #7f1d1d;
-    }
-
-    .feedback-title {
-      font-weight: 800;
-      font-size: 1.05rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .feedback-desc {
-      font-size: 0.95rem;
-      line-height: 1.4;
-    }
-
-    .next-btn {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 16px;
-      background: var(--primary);
-      color: white;
-      font-size: 1.1rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: none;
-      box-shadow: 0 4px 0 #1e40af;
-      transition: all 0.15s;
-    }
-
-    .next-btn.show {
-      display: block;
-    }
-
-    .next-btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 0 #1e40af;
-    }
-
-    /* Výsledková obrazovka výzvy */
-    .summary-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      width: 100%;
-    }
-
-    .summary-screen.show {
-      display: flex;
-    }
-
-    .score-circle {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: #eff6ff;
-      border: 5px solid var(--primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .score-circle span {
-      font-size: 2rem;
-      line-height: 1;
-    }
-
-    .mistakes-list {
-      width: 100%;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .mistake-item {
-      background: #fff1f2;
-      border: 1px solid #fecdd3;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 0.92rem;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 400px) {
-      .word-display { font-size: 2.1rem; }
-      .option-btn { font-size: 1.6rem; padding: 14px 0; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e0f2fe">
+<title>Hravá čeština – Vyjmenovaná slova</title>
+<link rel="apple-touch-icon" href="iconC.png">
+<link rel="icon" type="image/png" sizes="192x192" href="iconC.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Čeština">
+<style>
+:root{--bg:linear-gradient(135deg,#e0f2fe 0%,#f0fdf4 100%);--card:#fff;--primary:#2563eb;--primary-dark:#1e40af;--success:#16a34a;--success-bg:#dcfce7;--error:#dc2626;--error-bg:#fee2e2;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--shadow:0 10px 25px -5px rgba(0,0,0,.08),0 8px 10px -6px rgba(0,0,0,.04)}
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;padding:16px}
+button,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #f59e0b;outline-offset:3px}
+.app{width:100%;max-width:600px;display:flex;flex-direction:column;gap:16px}
+header{background:var(--card);padding:14px 20px;border-radius:20px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:1.2rem;font-weight:800;color:var(--primary);border:0;background:none;padding:0}
+.stats{display:flex;align-items:center;gap:12px}
+.star{background:#fef3c7;color:#92400e;padding:7px 12px;border-radius:999px;font-weight:800}
+.sound{border:0;background:#f1f5f9;width:40px;height:40px;border-radius:50%;font-size:1.1rem}
+.home,.controls,.game{background:var(--card);padding:24px 20px;border-radius:24px;box-shadow:var(--shadow)}
+.home{text-align:center;display:flex;flex-direction:column;gap:18px}
+h1{margin:0;color:var(--primary);font-size:1.8rem}
+p{line-height:1.5}
+.muted{color:var(--muted)}
+.primary{background:var(--primary);color:white;border:0;padding:16px;border-radius:16px;font-size:1.1rem;font-weight:800;box-shadow:0 4px 0 var(--primary-dark)}
+.primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--primary-dark)}
+.controls{display:flex;flex-direction:column;gap:13px;padding:16px}
+.mode-switch{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:#f1f5f9;padding:4px;border-radius:12px}
+.mode-btn{border:0;border-radius:9px;padding:10px 6px;background:transparent;color:var(--muted);font-weight:700}
+.mode-btn.active{background:white;color:var(--primary);box-shadow:0 2px 6px #0000000f}
+.settings{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.setting label{display:block;font-size:.82rem;color:var(--muted);font-weight:700;margin:0 0 5px 3px}
+select{width:100%;padding:10px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--text)}
+.letters{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.letter{border:2px solid var(--border);background:#fff;padding:7px 12px;border-radius:11px;font-weight:800}
+.letter.active{border-color:var(--primary);background:#eff6ff;color:var(--primary)}
+.game{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.progress{width:100%;display:none;flex-direction:column;gap:7px}
+.progress-info{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;color:var(--muted)}
+.track{height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--primary);transition:width .25s}
+.word{font-size:2.6rem;font-weight:800;letter-spacing:1px;line-height:1.25;overflow-wrap:anywhere}
+.blank{display:inline-block;min-width:34px;border-bottom:5px solid var(--primary);color:var(--primary);margin:0 3px}
+.blank.correct{background:var(--success-bg);border-color:var(--success);color:var(--success);border-radius:4px}
+.blank.wrong{background:var(--error-bg);border-color:var(--error);color:var(--error);border-radius:4px}
+.sentence{width:100%;padding:13px 15px;border:1px solid var(--border);border-radius:14px;background:#f8fafc;font-size:1.04rem;line-height:1.5;color:#334155}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:320px}
+.option{background:#f8fafc;border:2px solid #cbd5e1;border-radius:16px;padding:15px 0;font-size:1.8rem;font-weight:800;box-shadow:0 4px 0 #cbd5e1;color:var(--text)}
+.option:disabled{cursor:default;opacity:.8}
+.option.good{background:var(--success);border-color:#15803d;color:white;opacity:1}
+.option.bad{background:var(--error);border-color:#b91c1c;color:white;opacity:1}
+.feedback{display:none;width:100%;padding:15px;border-radius:15px;text-align:left;line-height:1.5}
+.feedback.show{display:block}
+.feedback.success{background:var(--success-bg);border:1px solid #86efac;color:#14532d}
+.feedback.error{background:var(--error-bg);border:1px solid #fca5a5;color:#7f1d1d}
+.feedback-title{font-weight:800;margin-bottom:4px}
+.next{display:none;width:100%;padding:15px;border:0;border-radius:15px;background:var(--primary);color:white;font-size:1.08rem;font-weight:800;box-shadow:0 4px 0 var(--primary-dark)}
+.next.show{display:block}
+.summary{display:none;width:100%;flex-direction:column;align-items:center;gap:14px}
+.summary.show{display:flex}
+.score{width:112px;height:112px;border:5px solid var(--primary);border-radius:50%;background:#eff6ff;color:var(--primary);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800}
+.score strong{font-size:2rem}
+.mistakes{width:100%;display:flex;flex-direction:column;gap:8px;text-align:left}
+.mistake{padding:10px 13px;border:1px solid #fecdd3;background:#fff1f2;border-radius:12px;font-size:.93rem;line-height:1.45}
+.small-note{font-size:.85rem;color:var(--muted)}
+@media(max-width:400px){body{padding:10px}.word{font-size:2.15rem}.home,.game{padding:21px 15px}.settings{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
+<div class="app">
+<header>
+  <button class="logo" id="homeLogo" type="button">📚 Hravá čeština</button>
+  <div class="stats"><div class="star" aria-label="Počet získaných hvězdiček">⭐ <span id="starCount">0</span></div>
+  <button class="sound" id="soundToggle" type="button" aria-label="Vypnout zvuk" title="Zapnout/vypnout zvuk">🔊</button></div>
+</header>
 
-  <div class="app-container">
-    <header>
-      <a class="logo" id="homeLogoLink">📚 Hravá čeština</a>
-      <div class="stats">
-        <div class="star-badge">⭐ <span id="starCount">0</span></div>
-        <button class="sound-btn" id="soundToggle" title="Zapnout/vypnout zvuk">🔊</button>
-      </div>
-    </header>
+<section class="home" id="homeScreen">
+  <h1>Vítej v Hravé češtině! 👋</h1>
+  <p class="muted">Procvič si vyjmenovaná slova, příbuzná slova i pravopisné chytáky. Sbírej hvězdičky a staň se mistrem pravopisu!</p>
+  <button class="primary" id="startApp">Spustit procvičování 🚀</button>
+  <p class="small-note">Tvoje hvězdičky se ukládají v tomto zařízení.</p>
+</section>
 
-    <!-- Úvodní obrazovka (Menu) -->
-    <section class="home-screen" id="homeScreen">
-      <h1>Vítej v Hravé češtině! 👋</h1>
-      <p>Procvič si vyjmenovaná slova, doplňování i/y a chyť se správných odpovědí. Sbírej hvězdičky a staň se mistrem pravopisu!</p>
-      <button class="menu-btn" id="startAppBtn">Spustit procvičování 🚀</button>
-    </section>
-
-    <!-- Hlavní herní sekce -->
-    <div id="gameAppWrapper" style="display: none; flex-direction: column; gap: 16px;">
-      <section class="controls">
-        <div class="mode-switch">
-          <button class="mode-btn active" data-mode="practice">♾️ Volný trénink</button>
-          <button class="mode-btn" data-mode="challenge">🏆 Výzva (10 slov)</button>
-        </div>
-        <div class="letters-grid" id="lettersGrid">
-          <button class="letter-btn active" data-letter="ALL">Mix všech</button>
-          <button class="letter-btn" data-letter="B">B</button>
-          <button class="letter-btn" data-letter="L">L</button>
-          <button class="letter-btn" data-letter="M">M</button>
-          <button class="letter-btn" data-letter="P">P</button>
-          <button class="letter-btn" data-letter="S">S</button>
-          <button class="letter-btn" data-letter="V">V</button>
-          <button class="letter-btn" data-letter="Z">Z</button>
-        </div>
-      </section>
-
-      <main class="game-card" id="gameCard">
-        <div class="progress-bar-wrap" id="progressWrap" style="display: none;">
-          <div class="progress-info">
-            <span id="questionCounter">Otázka 1 / 10</span>
-            <span id="challengeScore">Správně: 0</span>
-          </div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-        </div>
-
-        <div id="quizArea" style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px;">
-          <div class="word-display" id="wordDisplay">b<span class="blank"></span>t</div>
-          <div class="sentence-hint" id="sentenceHint">Chci <strong>b_t</strong> dobrým kamarádem.</div>
-
-          <!-- Na výběr vždy jen 2 relevantní varianty (i / y) -->
-          <div class="options-grid" id="optionsGrid">
-            <button class="option-btn" data-val="i" id="opt1">i</button>
-            <button class="option-btn" data-val="y" id="opt2">y</button>
-          </div>
-
-          <div class="feedback-box" id="feedbackBox">
-            <div class="feedback-title" id="feedbackTitle"></div>
-            <div class="feedback-desc" id="feedbackDesc"></div>
-          </div>
-
-          <button class="next-btn" id="nextBtn">Další slovo ➔</button>
-        </div>
-
-        <div class="summary-screen" id="summaryScreen">
-          <h2 style="font-size: 1.5rem;">Výzva dokončena! 🎉</h2>
-          <div class="score-circle">
-            <span id="finalScore">8/10</span>
-            <small>bodů</small>
-          </div>
-          <p id="summaryMessage" style="color: var(--text-muted); font-weight: 600;"></p>
-          <div class="mistakes-list" id="mistakesList"></div>
-          <button class="next-btn show" id="restartBtn">Hrát znovu 🔄</button>
-        </div>
-      </main>
+<div id="gameWrapper" style="display:none;flex-direction:column;gap:16px">
+<section class="controls">
+  <div class="mode-switch">
+    <button class="mode-btn active" data-mode="practice" type="button">♾️ Volný trénink</button>
+    <button class="mode-btn" data-mode="challenge" type="button">🏆 Výzva</button>
+  </div>
+  <div class="settings">
+    <div class="setting"><label for="levelSelect">Obtížnost</label>
+      <select id="levelSelect">
+        <option value="1">1 – Začátečník</option>
+        <option value="2" selected>2 – Pokročilý</option>
+        <option value="3">3 – Mistr pravopisu</option>
+      </select>
+    </div>
+    <div class="setting"><label for="categorySelect">Druh procvičování</label>
+      <select id="categorySelect">
+        <option value="all">Všechna slova</option>
+        <option value="vyjmenovana">Vyjmenovaná slova</option>
+        <option value="pribuzna">Příbuzná a jejich tvary</option>
+        <option value="nevyjmenovana">Ostatní slova</option>
+        <option value="dvojice">Významové dvojice</option>
+      </select>
     </div>
   </div>
+  <div class="letters" id="letters">
+    <button class="letter active" data-letter="ALL" type="button">Mix všech</button>
+    <button class="letter" data-letter="B" type="button">B</button><button class="letter" data-letter="L" type="button">L</button>
+    <button class="letter" data-letter="M" type="button">M</button><button class="letter" data-letter="P" type="button">P</button>
+    <button class="letter" data-letter="S" type="button">S</button><button class="letter" data-letter="V" type="button">V</button>
+    <button class="letter" data-letter="Z" type="button">Z</button>
+  </div>
+</section>
 
-  <script>
-    const WORD_BANK = [
-      // --- B ---
-      { letter: "B", before: "b", after: "t", ans: "ý", pair: ["ý", "í"], sentence: "Chci <strong>b_t</strong> dobrým fotbalistou.", type: "Vyjmenované slovo", rule: "Být (existovat, stát se něčím) je vyjmenované slovo po B." },
-      { letter: "B", before: "b", after: "t", ans: "í", pair: ["ý", "í"], sentence: "Nesmíme se navzájem <strong>b_t</strong>.", type: "Nevyjmenované slovo", rule: "Bít (tlouct, udeřit) není vyjmenované slovo, píšeme měkké í." },
-      { letter: "B", before: "b", after: "dlit", ans: "y", pair: ["y", "i"], sentence: "V našem domě <strong>b_dlí</strong> milí sousedé.", type: "Vyjmenované slovo", rule: "Bydlit je vyjmenované slovo po B." },
-      { letter: "B", before: "ob", after: "vatel", ans: "y", pair: ["y", "i"], sentence: "Každý <strong>ob_vatel</strong> města má svůj hlas.", type: "Slovo příbuzné", rule: "Slovo příbuzné k vyjmenovanému slovu bydlit." },
-      { letter: "B", before: "b", after: "strý", ans: "y", pair: ["y", "i"], sentence: "Liška je velmi <strong>b_stré</strong> zvíře.", type: "Vyjmenované slovo", rule: "Bystrý je vyjmenované slovo po B." },
-      { letter: "B", before: "b", after: "lina", ans: "y", pair: ["y", "i"], sentence: "Na louce roste léčivá <strong>b_lina</strong>.", type: "Vyjmenované slovo", rule: "Bylina je vyjmenované slovo po B." },
-      { letter: "B", before: "kob", after: "la", ans: "y", pair: ["y", "i"], sentence: "Na pastvině se pase hnědá <strong>kob_la</strong>.", type: "Vyjmenované slovo", rule: "Kobyla je vyjmenované slovo po B." },
-      { letter: "B", before: "b", after: "k", ans: "ý", pair: ["ý", "í"], sentence: "Na louce se pásl silný <strong>b_k</strong>.", type: "Vyjmenované slovo", rule: "Býk je vyjmenované slovo po B." },
-      { letter: "B", before: "Přib", after: "slav", ans: "y", pair: ["y", "i"], sentence: "Město <strong>Přib_slav</strong> leží na Vysočině.", type: "Vyjmenované slovo", rule: "Přibyslav je vyjmenované slovo po B." },
-      { letter: "B", before: "bab", after: "čka", ans: "i", pair: ["y", "i"], sentence: "Moje <strong>bab_čka</strong> peče nejlepší buchty.", type: "Nevyjmenované slovo", rule: "Babička není vyjmenované ani příbuzné slovo." },
-      { letter: "B", before: "b", after: "č", ans: "i", pair: ["y", "i"], sentence: "Kočí práskl dlouhým <strong>b_čem</strong>.", type: "Nevyjmenované slovo", rule: "Bič není vyjmenované slovo, píšeme měkké i." },
-      { letter: "B", before: "nab", after: "dka", ans: "í", pair: ["ý", "í"], sentence: "V obchodě mají výhodnou <strong>nab_dku</strong>.", type: "Nevyjmenované slovo", rule: "Nabídka (od nabízet) není vyjmenované slovo." },
-      { letter: "B", before: "odb", after: "rat", ans: "í", pair: ["ý", "í"], sentence: "Musíme pravidelně <strong>odb_rat</strong> časopis.", type: "Nevyjmenované slovo", rule: "Odbírat (od brát) se píše s měkkým í." },
-      { letter: "B", before: "nab", after: "zet", ans: "í", pair: ["ý", "í"], sentence: "Chci ti <strong>nab_zet</strong> svou pomoc.", type: "Nevyjmenované slovo", rule: "Nabízet není vyjmenované slovo." },
-      { letter: "B", before: "ub", after: "vat", ans: "ý", pair: ["ý", "í"], sentence: "Síly mu začaly rychle <strong>ub_vat</strong>.", type: "Slovo příbuzné", rule: "Ubývat je slovo příbuzné k vyjmenovanému slovu býti/být." },
-      { letter: "B", before: "dob", after: "tek", ans: "y", pair: ["y", "i"], sentence: "Na dvoře máme hospodářský <strong>dob_tek</strong>.", type: "Slovo příbuzné", rule: "Dobytek je slovo příbuzné k vyjmenovanému slovu býk." },
+<main class="game">
+  <div class="progress" id="progress">
+    <div class="progress-info"><span id="counter">Otázka 1 / 10</span><span id="score">Správně: 0</span></div>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+  </div>
+  <div id="quiz" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:18px">
+    <div class="word" id="wordDisplay" aria-label="Doplň chybějící písmeno">b<span class="blank">&nbsp;</span>ýt</div>
+    <div class="sentence" id="sentence" aria-live="polite">Chci <strong>b_t</strong> dobrým kamarádem.</div>
+    <div class="options" id="options">
+      <button class="option" id="opt1" type="button">i</button><button class="option" id="opt2" type="button">y</button>
+    </div>
+    <div class="feedback" id="feedback" role="status" aria-live="polite"><div class="feedback-title" id="feedbackTitle"></div><div id="feedbackText"></div></div>
+    <button class="next" id="nextBtn" type="button">Další slovo ➔</button>
+  </div>
+  <section class="summary" id="summary">
+    <h2>Výzva dokončena! 🎉</h2>
+    <div class="score"><strong id="finalScore">0/10</strong><small>bodů</small></div>
+    <p id="summaryMessage" class="muted"></p>
+    <div class="mistakes" id="mistakes"></div>
+    <button class="next show" id="restart" type="button">Hrát znovu 🔄</button>
+  </section>
+</main>
+</div>
+</div>
 
-      // --- L ---
-      { letter: "L", before: "sl", after: "šet", ans: "y", pair: ["y", "i"], sentence: "Z dálky je <strong>sl_šet</strong> zpěv ptáků.", type: "Vyjmenované slovo", rule: "Slyšet je vyjmenované slovo po L." },
-      { letter: "L", before: "ml", after: "n", ans: "ý", pair: ["ý", "í"], sentence: "U potoka stojí starý vodní <strong>ml_n</strong>.", type: "Vyjmenované slovo", rule: "Mlýn je vyjmenované slovo po L." },
-      { letter: "L", before: "bl", after: "skat se", ans: "ý", pair: ["ý", "í"], sentence: "Na obloze se začalo <strong>bl_skat</strong>.", type: "Vyjmenované slovo", rule: "Blýskat se je vyjmenované slovo po L." },
-      { letter: "L", before: "bl", after: "zký", ans: "í", pair: ["ý", "í"], sentence: "Můj <strong>bl_zký</strong> kamarád bydlí vedle.", type: "Nevyjmenované slovo", rule: "Blízký (blízko) není vyjmenované slovo." },
-      { letter: "L", before: "pol", after: "kat", ans: "y", pair: ["y", "i"], sentence: "Musíš sousto dobře rozkousat a pak <strong>pol_kat</strong>.", type: "Vyjmenované slovo", rule: "Polykat je vyjmenované slovo po L." },
-      { letter: "L", before: "pl", after: "nout", ans: "y", pair: ["y", "i"], sentence: "Čas rychle <strong>pl_ne</strong> jako voda.", type: "Vyjmenované slovo", rule: "Plynout je vyjmenované slovo po L." },
-      { letter: "L", before: "pl", after: "tvat", ans: "ý", pair: ["ý", "í"], sentence: "Jídlem se nesmí <strong>pl_tvat</strong>.", type: "Vyjmenované slovo", rule: "Plýtvat je vyjmenované slovo po L." },
-      { letter: "L", before: "vzl", after: "kat", ans: "y", pair: ["y", "i"], sentence: "Malé dítě začalo smutně <strong>vzl_kat</strong>.", type: "Vyjmenované slovo", rule: "Vzlykat je vyjmenované slovo po L." },
-      { letter: "L", before: "l", after: "sý", ans: "y", pair: ["y", "i"], sentence: "Dědeček má už úplně <strong>l_sou</strong> hlavu.", type: "Vyjmenované slovo", rule: "Lysý je vyjmenované slovo po L." },
-      { letter: "L", before: "l", after: "ška", ans: "i", pair: ["y", "i"], sentence: "Zrzavá <strong>l_ška</strong> běžela do lesa.", type: "Nevyjmenované slovo", rule: "Liška není vyjmenované slovo." },
-      { letter: "L", before: "l", after: "tko", ans: "ý", pair: ["ý", "í"], sentence: "Po běhání mě bolí pravé <strong>l_tko</strong>.", type: "Vyjmenované slovo", rule: "Lýtko je vyjmenované slovo po L." },
-      { letter: "L", before: "l", after: "ko", ans: "ý", pair: ["ý", "í"], sentence: "Z lipového <strong>l_ka</strong> se pletou košíky.", type: "Vyjmenované slovo", rule: "Lýko je vyjmenované slovo po L." },
-      { letter: "L", before: "l", after: "že", ans: "y", pair: ["y", "i"], sentence: "V zimě jezdíme na hory na <strong>l_že</strong>.", type: "Vyjmenované slovo", rule: "Lyže je vyjmenované slovo po L." },
-      { letter: "L", before: "Pel", after: "něk", ans: "y", pair: ["i", "y"], sentence: "Na kraji cesty roste hořký <strong>Pel_něk</strong>.", type: "Pravopis / Rostlina", rule: "Ve slově pelyněk píšeme na čtvrtém místě tvrdé y (pelyněk)." },
-      { letter: "L", before: "l", after: "stí", ans: "i", pair: ["y", "i"], sentence: "Na podzim padá ze stromů barevné <strong>l_stí</strong>.", type: "Nevyjmenované slovo", rule: "List není vyjmenované slovo." },
-      { letter: "L", before: "l", after: "cí", ans: "í", pair: ["ý", "í"], sentence: "Polévku jíš velkou <strong>l_cí</strong>.", type: "Nevyjmenované slovo", rule: "Lžíce není vyjmenované slovo." },
-      { letter: "L", before: "mluv", after: "t", ans: "í", pair: ["ý", "í"], sentence: "<strong>Mluv_t</strong> před cizími je vždy těžší.", type: "Nevyjmenované slovo", rule: "Mluvit není vyjmenované slovo, píšeme měkké í." },
+<script>
+"use strict";
 
-      // --- M ---
-      { letter: "M", before: "m", after: "t", ans: "ý", pair: ["ý", "í"], sentence: "Před jídlem si musíme <strong>m_t</strong> ruce.", type: "Vyjmenované slovo", rule: "Mýt (umývat vodou) je vyjmenované slovo po M." },
-      { letter: "M", before: "m", after: "t", ans: "í", pair: ["ý", "í"], sentence: "Chtěl bych <strong>m_t</strong> doma malé štěně.", type: "Nevyjmenované slovo", rule: "Mít (vlastnit) není vyjmenované slovo." },
-      { letter: "M", before: "m", after: "dlem", ans: "ý", pair: ["ý", "í"], sentence: "Umyj si ruce vodou a <strong>m_dlem</strong>.", type: "Slovo příbuzné", rule: "Mýdlo je slovo příbuzné k vyjmenovanému slovu mýt." },
-      { letter: "M", before: "m", after: "slit", ans: "y", pair: ["y", "i"], sentence: "Musíš u toho úkolu dobře <strong>m_slit</strong>.", type: "Vyjmenované slovo", rule: "Myslit je vyjmenované slovo po M." },
-      { letter: "M", before: "m", after: "lit se", ans: "ý", pair: ["ý", "í"], sentence: "Každý člověk se občas může <strong>m_lit</strong>.", type: "Vyjmenované slovo", rule: "Mýlit se je vyjmenované slovo po M." },
-      { letter: "M", before: "hm", after: "z", ans: "y", pair: ["y", "i"], sentence: "Včely, motýli a brouci patří mezi <strong>hm_z</strong>.", type: "Vyjmenované slovo", rule: "Hmyz je vyjmenované slovo po M." },
-      { letter: "M", before: "m", after: "š", ans: "y", pair: ["y", "i"], sentence: "Kočka chytila malou šedou <strong>m_š</strong>.", type: "Vyjmenované slovo", rule: "Myš je vyjmenované slovo po M." },
-      { letter: "M", before: "hlem", after: "žď", ans: "ý", pair: ["ý", "í"], sentence: "Po dešti vylezl z trávy <strong>hlem_žď</strong>.", type: "Vyjmenované slovo", rule: "Hlemýžď je vyjmenované slovo po M." },
-      { letter: "M", before: "m", after: "tit", ans: "ý", pair: ["ý", "í"], sentence: "Dřevorubci budou v lese <strong>m_tit</strong> staré stromy.", type: "Vyjmenované slovo", rule: "Mýtit je vyjmenované slovo po M." },
-      { letter: "M", before: "zam", after: "kat", ans: "y", pair: ["y", "i"], sentence: "Při odchodu z domu musíme <strong>zam_kat</strong>.", type: "Vyjmenované slovo", rule: "Zamykat je vyjmenované slovo po M." },
-      { letter: "M", before: "sm", after: "kal", ans: "ý", pair: ["ý", "í"], sentence: "Pes za sebou <strong>sm_kal</strong> dlouhý provaz.", type: "Vyjmenované slovo", rule: "Smýkat je vyjmenované slovo po M." },
-      { letter: "M", before: "dm", after: "chat", ans: "ý", pair: ["ý", "í"], sentence: "Kovář musel <strong>dm_chat</strong> do výhně.", type: "Vyjmenované slovo", rule: "Dmýchat je vyjmenované slovo po M." },
-      { letter: "M", before: "chm", after: "ří", ans: "ý", pair: ["ý", "í"], sentence: "Z pampelišky odlétá bílé <strong>chm_ří</strong>.", type: "Vyjmenované slovo", rule: "Chmýří je vyjmenované slovo po M." },
-      { letter: "M", before: "nachom", after: "tl", ans: "ý", pair: ["ý", "í"], sentence: "Náhodou se <strong>nachom_tl</strong> u té nehody.", type: "Vyjmenované slovo", rule: "Nachomýtnout se je vyjmenované slovo po M." },
-      { letter: "M", before: "m", after: "sa", ans: "í", pair: ["ý", "í"], sentence: "Na stole stojí hluboká <strong>m_sa</strong> s ovocem.", type: "Nevyjmenované slovo", rule: "Mísa není vyjmenované slovo." },
-      { letter: "M", before: "m", after: "čem", ans: "í", pair: ["ý", "í"], sentence: "Kluci si na hřišti kopou s <strong>m_čem</strong>.", type: "Nevyjmenované slovo", rule: "Míč není vyjmenované slovo, píšeme měkké í." },
-      { letter: "M", before: "m", after: "st", ans: "í", pair: ["ý", "í"], sentence: "Na světě je spousta krásných <strong>m_st</strong>.", type: "Nevyjmenované slovo", rule: "Míst (2. pád od slova místo) se píše s měkkým í." },
+/*
+ * Každá položka obsahuje:
+ * letter – procvičovaná obojetná souhláska
+ * before + ans + after – správně sestavené slovo
+ * sentence – věta s jedním podtržítkem na místě doplňovaného písmene
+ * kind – vyjmenovana / pribuzna / nevyjmenovana / dvojice
+ * level – doporučená úroveň 1 až 3
+ */
+const WORD_BANK = [
+  // B – vyjmenovaná slova a příbuzná
+  {letter:"B",before:"b",after:"t",ans:"ý",sentence:"Chci <strong>b_t</strong> dobrým kamarádem.",kind:"vyjmenovana",level:1,rule:"Být (existovat nebo stát se něčím) je vyjmenované slovo po B."},
+  {letter:"B",before:"b",after:"t",ans:"í",sentence:"Nesmíme se navzájem <strong>b_t</strong>.",kind:"nevyjmenovana",level:1,rule:"Bít znamená tlouct nebo udeřit. Není to vyjmenované slovo."},
+  {letter:"B",before:"b",after:"dlit",ans:"y",sentence:"V našem domě chceme <strong>b_dlit</strong>.",kind:"vyjmenovana",level:1,rule:"Bydlit je vyjmenované slovo po B."},
+  {letter:"B",before:"ob",after:"vatel",ans:"y",sentence:"Každý <strong>ob_vatel</strong> města má svůj hlas.",kind:"vyjmenovana",level:1,rule:"Obyvatel patří mezi vyjmenovaná slova po B."},
+  {letter:"B",before:"b",after:"strá",ans:"y",sentence:"Liška je velmi <strong>b_strá</strong>.",kind:"tvar",level:1,rule:"Bystrý je vyjmenované slovo po B. Ve větě je použit tvar bystrá."},
+  {letter:"B",before:"b",after:"lina",ans:"y",sentence:"Na louce roste léčivá <strong>b_lina</strong>.",kind:"vyjmenovana",level:1,rule:"Bylina je vyjmenované slovo po B."},
+  {letter:"B",before:"kob",after:"la",ans:"y",sentence:"Na pastvině se pase hnědá <strong>kob_la</strong>.",kind:"vyjmenovana",level:1,rule:"Kobyla je vyjmenované slovo po B."},
+  {letter:"B",before:"b",after:"k",ans:"ý",sentence:"Na louce se pásl silný <strong>b_k</strong>.",kind:"vyjmenovana",level:1,rule:"Býk je vyjmenované slovo po B."},
+  {letter:"B",before:"Přib",after:"slav",ans:"y",sentence:"Město <strong>Přib_slav</strong> leží na Vysočině.",kind:"vyjmenovana",level:2,rule:"Přibyslav je vlastní jméno zařazované mezi vyjmenovaná slova po B."},
+  {letter:"B",before:"b",after:"tě",ans:"y",sentence:"V novém <strong>b_tě</strong> máme velký balkon.",kind:"vyjmenovana",level:1,rule:"Byt (obydlí) patří mezi vyjmenovaná slova po B."},
+  {letter:"B",before:"příb",after:"tek",ans:"y",sentence:"Na horách jsme našli útulný <strong>příb_tek</strong>.",kind:"pribuzna",level:2,rule:"Příbytek souvisí se slovem byt."},
+  {letter:"B",before:"ná",after:"bytek",ans:"",sentence:"Do nového bytu jsme koupili nábytek.",kind:"pribuzna",level:3,rule:"Nábytek souvisí se slovem byt. Tato položka je informační; v kvízu se nepoužívá jako doplňovačka."},
+  {letter:"B",before:"dob",after:"tek",ans:"y",sentence:"Na dvoře chovají hospodářský <strong>dob_tek</strong>.",kind:"vyjmenovana",level:2,rule:"Dobytek patří mezi vyjmenovaná slova po B."},
+  {letter:"B",before:"oby",after:"čej",ans:"",sentence:"Obyčej je zvyk, který se předává z generace na generaci.",kind:"vyjmenovana",level:3,rule:"Obyčej patří mezi vyjmenovaná slova po B."},
+  {letter:"B",before:"bab",after:"čka",ans:"i",sentence:"Moje <strong>bab_čka</strong> peče nejlepší buchty.",kind:"nevyjmenovana",level:1,rule:"Babička není vyjmenované ani příbuzné slovo."},
+  {letter:"B",before:"b",after:"čem",ans:"i",sentence:"Kočí práskl dlouhým <strong>b_čem</strong>.",kind:"nevyjmenovana",level:1,rule:"Bič není vyjmenované slovo."},
+  {letter:"B",before:"nab",after:"dku",ans:"í",sentence:"V obchodě mají výhodnou <strong>nab_dku</strong>.",kind:"nevyjmenovana",level:2,rule:"Nabídka souvisí se slovesem nabízet; nejde o vyjmenované slovo."},
+  {letter:"B",before:"odb",after:"rat",ans:"í",sentence:"Musíme pravidelně <strong>odb_rat</strong> časopis.",kind:"nevyjmenovana",level:2,rule:"Odbírat se píše s měkkým í."},
+  {letter:"B",before:"ub",after:"vat",ans:"ý",sentence:"Síly mu začaly rychle <strong>ub_vat</strong>.",kind:"pribuzna",level:2,rule:"Ubývat souvisí se slovem být ve významu ubývání, zmenšování."},
+  {letter:"B",before:"b",after:"da",ans:"í",sentence:"V nouzi mu pomohla velká <strong>b_da</strong>.",kind:"nevyjmenovana",level:2,rule:"Bída není vyjmenované slovo; píšeme měkké í."},
+  {letter:"B",before:"b",after:"lý",ans:"í",sentence:"Sníh byl po ránu krásně <strong>b_lý</strong>.",kind:"nevyjmenovana",level:1,rule:"Bílý není vyjmenované ani příbuzné slovo po B."},
+  {letter:"B",before:"b",after:"skup",ans:"i",sentence:"<strong>B_skup</strong> vedl slavnostní mši.",kind:"nevyjmenovana",level:2,rule:"Biskup není vyjmenované slovo po B."},
+  {letter:"B",before:"ob",after:"hat",ans:"í",sentence:"Musíme <strong>ob_hat</strong> kaluž.",kind:"nevyjmenovana",level:2,rule:"Obíhat se píše s měkkým í."},
 
-      // --- P ---
-      { letter: "P", before: "p", after: "cha", ans: "ý", pair: ["ý", "í"], sentence: "<strong>P_cha</strong> předchází pád.", type: "Vyjmenované slovo", rule: "Pýcha je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "chnout", ans: "í", pair: ["ý", "í"], sentence: "Včela může nepříjemně <strong>p_chnout</strong>.", type: "Nevyjmenované slovo", rule: "Píchat (bodat) není vyjmenované slovo." },
-      { letter: "P", before: "p", after: "tel", ans: "y", pair: ["y", "i"], sentence: "Ve sklepě stojí velký <strong>p_tel</strong> brambor.", type: "Vyjmenované slovo", rule: "Pytel je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "sk", ans: "y", pair: ["y", "i"], sentence: "Slon má dlouhý chobot a prase <strong>p_sk</strong>.", type: "Vyjmenované slovo", rule: "Pysk je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "sku", ans: "í", pair: ["ý", "í"], sentence: "Děti si staví hrad z <strong>p_sku</strong>.", type: "Nevyjmenované slovo", rule: "Písek není vyjmenované slovo." },
-      { letter: "P", before: "netop", after: "r", ans: "ý", pair: ["ý", "í"], sentence: "V jeskyni spí hlavou dolů <strong>netop_r</strong>.", type: "Vyjmenované slovo", rule: "Netopýr je vyjmenované slovo po P." },
-      { letter: "P", before: "slep", after: "š", ans: "ý", pair: ["ý", "í"], sentence: "Na sluníčku se vyhřívá beznohý <strong>slep_š</strong>.", type: "Vyjmenované slovo", rule: "Slepýš je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "l", ans: "y", pair: ["y", "i"], sentence: "Včely sbírají z květů žlutý <strong>p_l</strong>.", type: "Vyjmenované slovo", rule: "Pyl je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "lou", ans: "i", pair: ["y", "i"], sentence: "Prkno jsme přeřízli ruční <strong>p_lou</strong>.", type: "Nevyjmenované slovo", rule: "Pila (nástroj) není vyjmenované slovo." },
-      { letter: "P", before: "kop", after: "ty", ans: "y", pair: ["y", "i"], sentence: "Kůň hlasitě klapal <strong>kop_ty</strong> po dlažbě.", type: "Vyjmenované slovo", rule: "Kopyto je vyjmenované slovo po P." },
-      { letter: "P", before: "klop", after: "tat", ans: "ý", pair: ["ý", "í"], sentence: "Nezakopl jsi? Nesmíš tolik <strong>klop_tat</strong>.", type: "Vyjmenované slovo", rule: "Klopýtat je vyjmenované slovo po P." },
-      { letter: "P", before: "třp", after: "tí", ans: "y", pair: ["y", "i"], sentence: "Na obloze se <strong>třp_tí</strong> tisíce hvězd.", type: "Vyjmenované slovo", rule: "Třpytit se je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "kat", ans: "y", pair: ["y", "i"], sentence: "Kdo zlobí, musí za to <strong>p_kat</strong>.", type: "Vyjmenované slovo", rule: "Pykat je vyjmenované slovo po P." },
-      { letter: "P", before: "p", after: "r", ans: "ý", pair: ["ý", "í"], sentence: "V trávě roste nepříjemný plevel <strong>p_r</strong>.", type: "Vyjmenované slovo", rule: "Pýr je vyjmenované slovo po P." },
+  {letter:"B",before:"sb",after:"rat",ans:"í",sentence:"Musíme <strong>sb_rat</strong> všechny papíry.",kind:"nevyjmenovana",level:2,rule:"Sbírat se píše s měkkým í."},
+  {letter:"B",before:"nab",after:"zet",ans:"í",sentence:"Chci ti <strong>nab_zet</strong> pomoc.",kind:"nevyjmenovana",level:2,rule:"Nabízet se píše s měkkým í."},
+  {letter:"B",before:"dob",after:"hat",ans:"í",sentence:"Pes začal <strong>dob_hat</strong> míček.",kind:"nevyjmenovana",level:2,rule:"Dobíhat se píše s měkkým í."},
+  {letter:"B",before:"prob",after:"hat",ans:"í",sentence:"Musíme <strong>prob_hat</strong> celý park.",kind:"nevyjmenovana",level:2,rule:"Probíhat se píše s měkkým í."},
 
-      // --- S ---
-      { letter: "S", before: "s", after: "n", ans: "y", pair: ["y", "i"], sentence: "Náš <strong>s_n</strong> chodí do třetí třídy.", type: "Vyjmenované slovo", rule: "Syn je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "tý", ans: "y", pair: ["y", "i"], sentence: "Po dobrém obědě jsem úplně <strong>s_tý</strong>.", type: "Vyjmenované slovo", rule: "Sytý je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "r", ans: "ý", pair: ["ý", "í"], sentence: "Myši mají nejraději tvrdý <strong>s_r</strong>.", type: "Vyjmenované slovo", rule: "Sýr je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "ra", ans: "í", pair: ["ý", "í"], sentence: "Žlutý prvek <strong>s_ra</strong> se používá na výrobu sirek.", type: "Nevyjmenované slovo", rule: "Síra není vyjmenované slovo." },
-      { letter: "S", before: "s", after: "rová", ans: "y", pair: ["y", "i"], sentence: "Mrkev je velmi zdravá i <strong>s_rová</strong>.", type: "Vyjmenované slovo", rule: "Syrový je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "chravé", ans: "y", pair: ["y", "i"], sentence: "Venku je dnes ošklivé <strong>s_chravé</strong> počasí.", type: "Vyjmenované slovo", rule: "Sychravý je vyjmenované slovo po S." },
-      { letter: "S", before: "us", after: "chá", ans: "y", pair: ["y", "i"], sentence: "V létě tráva na louce rychle <strong>us_chá</strong>.", type: "Vyjmenované slovo", rule: "Usychat je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "kora", ans: "ý", pair: ["ý", "í"], sentence: "Na krmítko přiletěla žlutá <strong>s_kora</strong>.", type: "Vyjmenované slovo", rule: "Sýkora je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "ček", ans: "ý", pair: ["ý", "í"], sentence: "Na poli si vyhrabal noru malý <strong>s_ček</strong>.", type: "Vyjmenované slovo", rule: "Sýček je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "sel", ans: "y", pair: ["y", "i"], sentence: "<strong>S_sel</strong> je chráněný hlodavec.", type: "Vyjmenované slovo", rule: "Sysel je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "čel", ans: "y", pair: ["y", "i"], sentence: "Had hlasitě <strong>s_čel</strong> v trávě.", type: "Vyjmenované slovo", rule: "Syčet je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "pat", ans: "y", pair: ["y", "i"], sentence: "Zedník začal <strong>s_pat</strong> písek na hromadu.", type: "Vyjmenované slovo", rule: "Sypat je vyjmenované slovo po S." },
-      { letter: "S", before: "s", after: "tko", ans: "í", pair: ["ý", "í"], sentence: "Čaj přecedíme přes jemné <strong>s_tko</strong>.", type: "Nevyjmenované slovo", rule: "Sítko není vyjmenované slovo." },
+  // L
+  {letter:"L",before:"sl",after:"šet",ans:"y",sentence:"Z dálky je <strong>sl_šet</strong> zpěv ptáků.",kind:"vyjmenovana",level:1,rule:"Slyšet je vyjmenované slovo po L."},
+  {letter:"L",before:"ml",after:"n",ans:"ý",sentence:"U potoka stojí starý vodní <strong>ml_n</strong>.",kind:"vyjmenovana",level:1,rule:"Mlýn je vyjmenované slovo po L."},
+  {letter:"L",before:"bl",after:"skat",ans:"ý",sentence:"Na obloze se začalo <strong>bl_skat</strong>.",kind:"vyjmenovana",level:1,rule:"Blýskat se je vyjmenované slovo po L."},
+  {letter:"L",before:"pol",after:"kat",ans:"y",sentence:"Sousto musíme dobře <strong>pol_kat</strong>.",kind:"vyjmenovana",level:1,rule:"Polykat je vyjmenované slovo po L."},
+  {letter:"L",before:"pl",after:"ne",ans:"y",sentence:"Čas rychle <strong>pl_ne</strong> jako voda.",kind:"tvar",level:1,rule:"Plynout je vyjmenované slovo po L. Zde je použit tvar plyne."},
+  {letter:"L",before:"pl",after:"tvat",ans:"ý",sentence:"Jídlem se nesmí <strong>pl_tvat</strong>.",kind:"vyjmenovana",level:1,rule:"Plýtvat je vyjmenované slovo po L."},
+  {letter:"L",before:"vzl",after:"kat",ans:"y",sentence:"Malé dítě začalo smutně <strong>vzl_kat</strong>.",kind:"vyjmenovana",level:1,rule:"Vzlykat je vyjmenované slovo po L."},
+  {letter:"L",before:"l",after:"sou",ans:"y",sentence:"Dědeček má úplně <strong>l_sou</strong> hlavu.",kind:"tvar",level:2,rule:"Lysý je vyjmenované slovo po L. Lysou je jeho tvar."},
+  {letter:"L",before:"l",after:"tko",ans:"ý",sentence:"Po běhání mě bolí pravé <strong>l_tko</strong>.",kind:"vyjmenovana",level:1,rule:"Lýtko je vyjmenované slovo po L."},
+  {letter:"L",before:"l",after:"ka",ans:"ý",sentence:"Z lipového <strong>l_ka</strong> se pletou košíky.",kind:"vyjmenovana",level:1,rule:"Lýko je vyjmenované slovo po L."},
+  {letter:"L",before:"l",after:"že",ans:"y",sentence:"V zimě jezdíme na hory na <strong>l_že</strong>.",kind:"vyjmenovana",level:1,rule:"Lyže je vyjmenované slovo po L."},
+  {letter:"L",before:"Pel",after:"něk",ans:"y",sentence:"Na kraji cesty roste hořký <strong>Pel_něk</strong>.",kind:"vyjmenovana",level:2,rule:"Pelyněk patří mezi vyjmenovaná slova po L."},
+  {letter:"L",before:"pl",after:"š",ans:"y",sentence:"Medvídek měl hebký <strong>pl_š</strong>.",kind:"vyjmenovana",level:3,rule:"Plyš se řadí k vyjmenovaným slovům po L."},
+  {letter:"L",before:"pl",after:"tký",ans:"y",sentence:"Tento rybník je velmi <strong>pl_tký</strong>.",kind:"vyjmenovana",level:3,rule:"Plytký patří mezi vyjmenovaná slova po L."},
+  {letter:"L",before:"l",after:"ška",ans:"i",sentence:"Zrzavá <strong>l_ška</strong> běžela do lesa.",kind:"nevyjmenovana",level:1,rule:"Liška není vyjmenované slovo."},
+  {letter:"L",before:"l",after:"stí",ans:"i",sentence:"Na podzim padá ze stromů barevné <strong>l_stí</strong>.",kind:"nevyjmenovana",level:1,rule:"Listí není vyjmenované slovo."},
+  {letter:"L",before:"lž",after:"cí",ans:"í",sentence:"Polévku jíme velkou <strong>lž_cí</strong>.",kind:"nevyjmenovana",level:1,rule:"Lžíce se píše s měkkým í."},
+  {letter:"L",before:"bl",after:"zký",ans:"í",sentence:"Můj <strong>bl_zký</strong> kamarád bydlí vedle.",kind:"nevyjmenovana",level:2,rule:"Blízký souvisí se slovem blízko, nikoli s vyjmenovaným slovem blýskat."},
+  {letter:"L",before:"l",after:"pa",ans:"í",sentence:"U domu roste vysoká <strong>l_pa</strong>.",kind:"nevyjmenovana",level:1,rule:"Lípa není vyjmenované slovo."},
+  {letter:"L",before:"l",after:"tat",ans:"í",sentence:"Děti se učí <strong>l_tat</strong> na trampolíně.",kind:"nevyjmenovana",level:2,rule:"Lítat se píše s měkkým í."},
+  {letter:"L",before:"l",after:"zat",ans:"í",sentence:"Nedovol psovi <strong>l_zat</strong> talíř.",kind:"nevyjmenovana",level:2,rule:"Lízat se píše s měkkým í."},
 
-      // --- V ---
-      { letter: "V", before: "v", after: "soké", ans: "y", pair: ["y", "i"], sentence: "V lese rostou <strong>v_soké</strong> smrky.", type: "Vyjmenované slovo", rule: "Vysoký je vyjmenované slovo po V." },
-      { letter: "V", before: "v", after: "t", ans: "ý", pair: ["ý", "í"], sentence: "V noci bylo slyšet <strong>v_t</strong> vlka.", type: "Vyjmenované slovo", rule: "Výt (vydávat zvuk) je vyjmenované slovo po V." },
-      { letter: "V", before: "v", after: "t", ans: "í", pair: ["ý", "í"], sentence: "Dívky budou z pampelišek <strong>v_t</strong> věnečky.", type: "Nevyjmenované slovo", rule: "Vít (splétat) není vyjmenované slovo." },
-      { letter: "V", before: "v", after: "skat", ans: "ý", pair: ["ý", "í"], sentence: "Děti začaly radostí <strong>v_skat</strong>.", type: "Vyjmenované slovo", rule: "Výskat je vyjmenované slovo po V." },
-      { letter: "V", before: "zv", after: "kneš", ans: "y", pair: ["y", "i"], sentence: "Na novou školu si rychle <strong>zv_kneš</strong>.", type: "Vyjmenované slovo", rule: "Zvykat si je vyjmenované slovo po V." },
-      { letter: "V", before: "žv", after: "kat", ans: "ý", pair: ["ý", "í"], sentence: "Ve škole se nesmí při hodině <strong>žv_kat</strong>.", type: "Vyjmenované slovo", rule: "Žvýkat je vyjmenované slovo po V." },
-      { letter: "V", before: "v", after: "dra", ans: "y", pair: ["y", "i"], sentence: "V čisté řece plave <strong>v_dra</strong>.", type: "Vyjmenované slovo", rule: "Vydra je vyjmenované slovo po V." },
-      { letter: "V", before: "v", after: "r", ans: "ý", pair: ["ý", "í"], sentence: "Naše největší sova se jmenuje <strong>v_r</strong> velký.", type: "Vyjmenované slovo", rule: "Výr (sova) je vyjmenované slovo po V." },
-      { letter: "V", before: "v", after: "r", ans: "í", pair: ["ý", "í"], sentence: "V řece se vytvořil nebezpečný vodní <strong>v_r</strong>.", type: "Nevyjmenované slovo", rule: "Vír (vodní proud) není vyjmenované slovo." },
-      { letter: "V", before: "v", after: "skat", ans: "í", pair: ["ý", "í"], sentence: "Maminka bude dcerce <strong>v_skat</strong> jemně ve vlasech.", type: "Nevyjmenované slovo", rule: "Vískat (probírat se ve vlasech) se píše s měkkým í." },
-      { letter: "V", before: "pov", after: "k", ans: "y", pair: ["y", "i"], sentence: "Na hřišti nastal velký <strong>pov_k</strong>.", type: "Vyjmenované slovo", rule: "Povyk je vyjmenované slovo po V." },
+  {letter:"L",before:"l",after:"stek",ans:"í",sentence:"V knize byl založený <strong>l_stek</strong>.",kind:"nevyjmenovana",level:1,rule:"Lístek se píše s měkkým í."},
+  {letter:"L",before:"l",after:"dé",ans:"i",sentence:"Na náměstí čekali <strong>l_dé</strong>.",kind:"nevyjmenovana",level:1,rule:"Lidé se píše s měkkým i."},
+  {letter:"L",before:"l",after:"nka",ans:"i",sentence:"Na stole ležela modrá <strong>l_nka</strong>.",kind:"nevyjmenovana",level:2,rule:"Linka se píše s měkkým i."},
+  {letter:"L",before:"l",after:"s",ans:"i",sentence:"Dědeček používá na dřevo ruční <strong>l_s</strong>.",kind:"nevyjmenovana",level:2,rule:"Lis se píše s měkkým i."},
+  {letter:"L",before:"l",after:"st",ans:"i",sentence:"Na stole leží dlouhý <strong>l_st</strong> papíru.",kind:"nevyjmenovana",level:1,rule:"List se píše s měkkým i."},
 
-      // --- Z ---
-      { letter: "Z", before: "brz", after: "", ans: "y", pair: ["y", "i"], sentence: "Přijď <strong>brz_</strong> domů, ať nezmokneš!", type: "Vyjmenované slovo", rule: "Brzy je vyjmenované slovo po Z." },
-      { letter: "Z", before: "brz", after: "čko", ans: "i", pair: ["y", "i"], sentence: "Vstávali jsme dnes už velice <strong>brz_čko</strong>.", type: "Nevyjmenované slovo", rule: "Po měkkém Z v příponě -ičko píšeme měkké i." },
-      { letter: "Z", before: "jaz", after: "k", ans: "y", pair: ["y", "i"], sentence: "Český <strong>jaz_k</strong> je velmi bohatý.", type: "Vyjmenované slovo", rule: "Jazyk je vyjmenované slovo po Z." },
-      { letter: "Z", before: "naz", after: "vá", ans: "ý", pair: ["ý", "í"], sentence: "Jak se <strong>naz_vá</strong> naše hlavní město?", type: "Vyjmenované slovo", rule: "Nazývat se je vyjmenované slovo po Z." },
-      { letter: "Z", before: "z", after: "mě", ans: "i", pair: ["y", "i"], sentence: "V <strong>z_mě</strong> padá sníh a mrzne.", type: "Nevyjmenované slovo", rule: "Zima není vyjmenované slovo." },
-      { letter: "Z", before: "z", after: "vat", ans: "í", pair: ["ý", "í"], sentence: "Když jsi unavený, začneš <strong>z_vat</strong>.", type: "Nevyjmenované slovo", rule: "Zívat není vyjmenované slovo." }
-    ];
+  // M
+  {letter:"M",before:"m",after:"t",ans:"ý",sentence:"Před jídlem si musíme <strong>m_t</strong> ruce.",kind:"vyjmenovana",level:1,rule:"Mýt (umývat vodou) je vyjmenované slovo po M."},
+  {letter:"M",before:"m",after:"t",ans:"í",sentence:"Chtěl bych <strong>m_t</strong> doma malé štěně.",kind:"dvojice",level:1,rule:"Mít znamená vlastnit. Mýt znamená umývat. Rozhoduje význam věty."},
+  {letter:"M",before:"m",after:"dlem",ans:"ý",sentence:"Umyj si ruce vodou a <strong>m_dlem</strong>.",kind:"pribuzna",level:1,rule:"Mýdlo je příbuzné ke slovu mýt."},
+  {letter:"M",before:"m",after:"slet",ans:"y",sentence:"Při testu musíš dobře <strong>m_slet</strong>.",kind:"vyjmenovana",level:2,rule:"Myslet (také myslit) je vyjmenované slovo po M."},
+  {letter:"M",before:"m",after:"lit",ans:"ý",sentence:"Každý člověk se občas může <strong>m_lit</strong>.",kind:"vyjmenovana",level:1,rule:"Mýlit se je vyjmenované slovo po M."},
+  {letter:"M",before:"hm",after:"z",ans:"y",sentence:"Včely, motýli a brouci patří mezi <strong>hm_z</strong>.",kind:"vyjmenovana",level:1,rule:"Hmyz je vyjmenované slovo po M."},
+  {letter:"M",before:"m",after:"š",ans:"y",sentence:"Kočka chytila malou šedou <strong>m_š</strong>.",kind:"vyjmenovana",level:1,rule:"Myš je vyjmenované slovo po M."},
+  {letter:"M",before:"hlem",after:"žď",ans:"ý",sentence:"Po dešti vylezl z trávy <strong>hlem_žď</strong>.",kind:"vyjmenovana",level:1,rule:"Hlemýžď je vyjmenované slovo po M."},
+  {letter:"M",before:"m",after:"tit",ans:"ý",sentence:"Dřevorubci budou v lese <strong>m_tit</strong> staré stromy.",kind:"vyjmenovana",level:2,rule:"Mýtit je vyjmenované slovo po M."},
+  {letter:"M",before:"zam",after:"kat",ans:"y",sentence:"Při odchodu z domu musíme <strong>zam_kat</strong>.",kind:"vyjmenovana",level:1,rule:"Zamykat je vyjmenované slovo po M."},
+  {letter:"M",before:"sm",after:"kat",ans:"ý",sentence:"Pes se snažil <strong>sm_kat</strong> provazem.",kind:"vyjmenovana",level:2,rule:"Smýkat je vyjmenované slovo po M."},
+  {letter:"M",before:"dm",after:"chat",ans:"ý",sentence:"Kovář musel <strong>dm_chat</strong> do výhně.",kind:"vyjmenovana",level:3,rule:"Dmýchat je vyjmenované slovo po M."},
+  {letter:"M",before:"chm",after:"ří",ans:"ý",sentence:"Z pampelišky odlétá bílé <strong>chm_ří</strong>.",kind:"vyjmenovana",level:2,rule:"Chmýří je vyjmenované slovo po M."},
+  {letter:"M",before:"nachom",after:"tl",ans:"ý",sentence:"Náhodou se <strong>nachom_tl</strong> u té nehody.",kind:"vyjmenovana",level:3,rule:"Nachomýtnout se patří mezi vyjmenovaná slova po M."},
+  {letter:"M",before:"m",after:"sa",ans:"í",sentence:"Na stole stojí hluboká <strong>m_sa</strong> s ovocem.",kind:"nevyjmenovana",level:1,rule:"Mísa není vyjmenované slovo."},
+  {letter:"M",before:"m",after:"čem",ans:"í",sentence:"Kluci si na hřišti kopou s <strong>m_čem</strong>.",kind:"nevyjmenovana",level:1,rule:"Míč se píše s měkkým í."},
+  {letter:"M",before:"m",after:"sto",ans:"í",sentence:"Na stole leželo <strong>m_sto</strong> pro každého hosta.",kind:"nevyjmenovana",level:1,rule:"Místo není vyjmenované slovo."},
+  {letter:"M",before:"m",after:"řit",ans:"í",sentence:"Chci <strong>m_řit</strong> přesně na terč.",kind:"nevyjmenovana",level:2,rule:"Mířit se píše s měkkým í."},
+  {letter:"M",before:"m",after:"lý",ans:"i",sentence:"Byl to velmi <strong>m_lý</strong> člověk.",kind:"nevyjmenovana",level:2,rule:"Milý (příjemný) se píše s měkkým i."},
+  {letter:"M",before:"m",after:"to",ans:"ý",sentence:"Za průjezd přes starý most se kdysi platilo <strong>m_to</strong>.",kind:"vyjmenovana",level:3,rule:"Mýto je vyjmenované slovo po M."},
 
-    let currentMode = 'practice';
-    let currentLetter = 'ALL';
-    let currentWord = null;
-    let stars = 0;
-    let soundEnabled = true;
+  {letter:"M",before:"m",after:"nout",ans:"i",sentence:"Musíme <strong>m_nout</strong> kolem školy.",kind:"nevyjmenovana",level:2,rule:"Minout se píše s měkkým i."},
+  {letter:"M",before:"m",after:"lovat",ans:"i",sentence:"Rád se učím <strong>m_lovat</strong> obrázky.",kind:"nevyjmenovana",level:2,rule:"Milovat se píše s měkkým i."},
+  {letter:"M",before:"m",after:"nimálně",ans:"i",sentence:"Potřebujeme <strong>m_nimálně</strong> tři sešity.",kind:"nevyjmenovana",level:3,rule:"Minimálně se píše s měkkým i."},
+  {letter:"M",before:"m",after:"lion",ans:"i",sentence:"Ve městě žije skoro <strong>m_lion</strong> lidí.",kind:"nevyjmenovana",level:3,rule:"Milion se píše s měkkým i."},
+  {letter:"M",before:"m",after:"minko",ans:"i",sentence:"Naše malé <strong>m_minko</strong> už spí.",kind:"nevyjmenovana",level:1,rule:"Miminko se píše s měkkým i."},
+  {letter:"M",before:"m",after:"nutu",ans:"i",sentence:"Počkej ještě jednu <strong>m_nutu</strong>.",kind:"nevyjmenovana",level:1,rule:"Minuta se píše s měkkým i."},
 
-    let challengePool = [];
-    let challengeIndex = 0;
-    let challengeCorrect = 0;
-    let challengeMistakes = [];
-    const CHALLENGE_LENGTH = 10;
+  // P
+  {letter:"P",before:"p",after:"cha",ans:"ý",sentence:"<strong>P_cha</strong> předchází pád.",kind:"vyjmenovana",level:1,rule:"Pýcha je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"tel",ans:"y",sentence:"Ve sklepě stojí velký <strong>p_tel</strong> brambor.",kind:"vyjmenovana",level:1,rule:"Pytel je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"sk",ans:"y",sentence:"Slon má dlouhý chobot a prase <strong>p_sk</strong>.",kind:"vyjmenovana",level:1,rule:"Pysk je vyjmenované slovo po P."},
+  {letter:"P",before:"netop",after:"r",ans:"ý",sentence:"V jeskyni spí hlavou dolů <strong>netop_r</strong>.",kind:"vyjmenovana",level:1,rule:"Netopýr je vyjmenované slovo po P."},
+  {letter:"P",before:"slep",after:"š",ans:"ý",sentence:"Na sluníčku se vyhřívá beznohý <strong>slep_š</strong>.",kind:"vyjmenovana",level:1,rule:"Slepýš je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"l",ans:"y",sentence:"Včely sbírají z květů žlutý <strong>p_l</strong>.",kind:"vyjmenovana",level:1,rule:"Pyl je vyjmenované slovo po P."},
+  {letter:"P",before:"kop",after:"ty",ans:"y",sentence:"Kůň hlasitě klapal <strong>kop_ty</strong> po dlažbě.",kind:"vyjmenovana",level:1,rule:"Kopyto je vyjmenované slovo po P."},
+  {letter:"P",before:"klop",after:"tat",ans:"ý",sentence:"Při běhu nesmíš <strong>klop_tat</strong>.",kind:"vyjmenovana",level:2,rule:"Klopýtat je vyjmenované slovo po P."},
+  {letter:"P",before:"třp",after:"tí",ans:"y",sentence:"Na obloze se <strong>třp_tí</strong> tisíce hvězd.",kind:"vyjmenovana",level:2,rule:"Třpytit se je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"kat",ans:"y",sentence:"Kdo zlobí, musí za to <strong>p_kat</strong>.",kind:"vyjmenovana",level:2,rule:"Pykat je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"r",ans:"ý",sentence:"Na louce roste plevel <strong>p_r</strong>.",kind:"vyjmenovana",level:2,rule:"Pýr je vyjmenované slovo po P."},
+  {letter:"P",before:"p",after:"chnout",ans:"í",sentence:"Včela může nepříjemně <strong>p_chnout</strong>.",kind:"nevyjmenovana",level:1,rule:"Píchnout (bodat) se píše s měkkým í."},
+  {letter:"P",before:"p",after:"sku",ans:"í",sentence:"Děti si staví hrad z <strong>p_sku</strong>.",kind:"nevyjmenovana",level:1,rule:"Písek není vyjmenované slovo."},
+  {letter:"P",before:"p",after:"lou",ans:"i",sentence:"Prkno jsme přeřízli ruční <strong>p_lou</strong>.",kind:"nevyjmenovana",level:1,rule:"Pila (nástroj) není vyjmenované slovo."},
+  {letter:"P",before:"p",after:"smeno",ans:"í",sentence:"Napiš první <strong>p_smeno</strong> abecedy.",kind:"nevyjmenovana",level:2,rule:"Písmeno se píše s měkkým í."},
+  {letter:"P",before:"p",after:"lný",ans:"i",sentence:"Náš <strong>p_lný</strong> žák vždy dokončí úkol.",kind:"nevyjmenovana",level:2,rule:"Pilný se píše s měkkým i."},
+  {letter:"P",before:"p",after:"snička",ans:"í",sentence:"Z rádia hrála veselá <strong>p_snička</strong>.",kind:"nevyjmenovana",level:2,rule:"Písnička se píše s měkkým í."},
+  {letter:"P",before:"zp",after:"tovat",ans:"y",sentence:"Musíme si dobře <strong>zp_tovat</strong> svědomí.",kind:"pribuzna",level:3,rule:"Zpytovat souvisí s vyjmenovaným slovem pýcha."},
 
-    const starCountEl = document.getElementById('starCount');
-    const soundToggleBtn = document.getElementById('soundToggle');
-    const homeScreen = document.getElementById('homeScreen');
-    const gameAppWrapper = document.getElementById('gameAppWrapper');
-    const startAppBtn = document.getElementById('startAppBtn');
-    const homeLogoLink = document.getElementById('homeLogoLink');
+  {letter:"P",before:"p",after:"t",ans:"í",sentence:"Po dlouhém běhu potřebuji <strong>p_t</strong> vodu.",kind:"nevyjmenovana",level:1,rule:"Pít se píše s měkkým í."},
+  {letter:"P",before:"p",after:"le",ans:"í",sentence:"Jeho <strong>p_le</strong> přišla vhod.",kind:"nevyjmenovana",level:2,rule:"Píle se píše s měkkým í."},
+  {letter:"P",before:"p",after:"šťalu",ans:"í",sentence:"Na flétnu podobnou <strong>p_šťalu</strong> se hrálo už dávno.",kind:"nevyjmenovana",level:2,rule:"Píšťala se píše s měkkým í."},
+  {letter:"P",before:"p",after:"sař",ans:"í",sentence:"<strong>P_sař</strong> zapisoval důležité zprávy.",kind:"nevyjmenovana",level:3,rule:"Písař se píše s měkkým í."},
 
-    const modeBtns = document.querySelectorAll('.mode-btn');
-    const letterBtns = document.querySelectorAll('.letter-btn');
-    const progressWrap = document.getElementById('progressWrap');
-    const questionCounterEl = document.getElementById('questionCounter');
-    const challengeScoreEl = document.getElementById('challengeScore');
-    const progressFillEl = document.getElementById('progressFill');
-    const wordDisplayEl = document.getElementById('wordDisplay');
-    const sentenceHintEl = document.getElementById('sentenceHint');
-    const opt1 = document.getElementById('opt1');
-    const opt2 = document.getElementById('opt2');
-    const feedbackBox = document.getElementById('feedbackBox');
-    const feedbackTitle = document.getElementById('feedbackTitle');
-    const feedbackDesc = document.getElementById('feedbackDesc');
-    const nextBtn = document.getElementById('nextBtn');
-    const quizArea = document.getElementById('quizArea');
-    const summaryScreen = document.getElementById('summaryScreen');
-    const finalScoreEl = document.getElementById('finalScore');
-    const summaryMessageEl = document.getElementById('summaryMessage');
-    const mistakesListEl = document.getElementById('mistakesList');
-    const restartBtn = document.getElementById('restartBtn');
+  // S
+  {letter:"S",before:"s",after:"n",ans:"y",sentence:"Náš <strong>s_n</strong> chodí do třetí třídy.",kind:"vyjmenovana",level:1,rule:"Syn je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"tý",ans:"y",sentence:"Po dobrém obědě jsem úplně <strong>s_tý</strong>.",kind:"vyjmenovana",level:1,rule:"Sytý je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"r",ans:"ý",sentence:"Myši mají nejraději tvrdý <strong>s_r</strong>.",kind:"vyjmenovana",level:1,rule:"Sýr je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"rová",ans:"y",sentence:"Mrkev je zdravá i <strong>s_rová</strong>.",kind:"vyjmenovana",level:1,rule:"Syrový je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"chravé",ans:"y",sentence:"Venku je dnes <strong>s_chravé</strong> počasí.",kind:"vyjmenovana",level:2,rule:"Sychravý je vyjmenované slovo po S."},
+  {letter:"S",before:"us",after:"chá",ans:"y",sentence:"V létě tráva na louce rychle <strong>us_chá</strong>.",kind:"vyjmenovana",level:2,rule:"Usychat je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"kora",ans:"ý",sentence:"Na krmítko přiletěla žlutá <strong>s_kora</strong>.",kind:"vyjmenovana",level:1,rule:"Sýkora je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"ček",ans:"ý",sentence:"Na staré půdě zahoukal <strong>s_ček</strong>.",kind:"vyjmenovana",level:2,rule:"Sýček je vyjmenované slovo po S. Je to malá sova."},
+  {letter:"S",before:"s",after:"sel",ans:"y",sentence:"<strong>S_sel</strong> je hlodavec, který žije v norách.",kind:"vyjmenovana",level:1,rule:"Sysel je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"čet",ans:"y",sentence:"Had začal <strong>s_čet</strong> v trávě.",kind:"vyjmenovana",level:2,rule:"Syčet je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"pat",ans:"y",sentence:"Zedník začal <strong>s_pat</strong> písek na hromadu.",kind:"vyjmenovana",level:1,rule:"Sypat je vyjmenované slovo po S."},
+  {letter:"S",before:"s",after:"ra",ans:"í",sentence:"Žlutý prvek <strong>s_ra</strong> se používá při výrobě sirek.",kind:"nevyjmenovana",level:2,rule:"Síra není vyjmenované slovo; píšeme měkké í."},
+  {letter:"S",before:"s",after:"lu",ans:"í",sentence:"K překonání překážky potřebuješ <strong>s_lu</strong>.",kind:"nevyjmenovana",level:1,rule:"Síla se píše s měkkým í."},
+  {letter:"S",before:"s",after:"to",ans:"í",sentence:"Čaj přecedíme přes jemné <strong>s_to</strong>.",kind:"nevyjmenovana",level:1,rule:"Síto se píše s měkkým í."},
+  {letter:"S",before:"s",after:"lný",ans:"i",sentence:"Tento sportovec je velmi <strong>s_lný</strong>.",kind:"nevyjmenovana",level:2,rule:"Silný se píše s měkkým i."},
+  {letter:"S",before:"s",after:"lnice",ans:"i",sentence:"Naše <strong>s_lnice</strong> vede do města.",kind:"nevyjmenovana",level:2,rule:"Silnice se píše s měkkým i."},
+  {letter:"S",before:"s",after:"tko",ans:"í",sentence:"Čaj přecedíme přes jemné <strong>s_tko</strong>.",kind:"nevyjmenovana",level:1,rule:"Sítko se píše s měkkým í."},
 
-    starCountEl.textContent = stars;
+  {letter:"S",before:"s",after:"dlo",ans:"í",sentence:"Naše <strong>s_dlo</strong> je blízko školy.",kind:"nevyjmenovana",level:2,rule:"Sídlo se píše s měkkým í."},
+  {letter:"S",before:"s",after:"ť",ans:"í",sentence:"Rybář nahodil <strong>s_ť</strong> do vody.",kind:"nevyjmenovana",level:2,rule:"Síť se píše s měkkým í."},
+  {letter:"S",before:"s",after:"dlit",ans:"í",sentence:"Naše rodina bude <strong>s_dlit</strong> v novém domě.",kind:"nevyjmenovana",level:3,rule:"Sídlit se píše s měkkým í."},
+  {letter:"S",before:"s",after:"mě",ans:"í",sentence:"Na louce se objevilo první <strong>s_mě</strong>.",kind:"nevyjmenovana",level:3,rule:"Símě se píše s měkkým í."},
 
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (!soundEnabled) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+  // V
+  {letter:"V",before:"v",after:"soké",ans:"y",sentence:"V lese rostou <strong>v_soké</strong> smrky.",kind:"tvar",level:1,rule:"Vysoký je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"t",ans:"ý",sentence:"V noci bylo slyšet <strong>v_t</strong> vlka.",kind:"vyjmenovana",level:1,rule:"Výt (vydávat zvuk) je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"t",ans:"í",sentence:"Dívky budou z pampelišek <strong>v_t</strong> věnečky.",kind:"dvojice",level:2,rule:"Vít znamená splétat. Výt znamená vydávat táhlý zvuk."},
+  {letter:"V",before:"v",after:"skat",ans:"ý",sentence:"Děti začaly radostí <strong>v_skat</strong>.",kind:"vyjmenovana",level:1,rule:"Výskat je vyjmenované slovo po V."},
+  {letter:"V",before:"zv",after:"kneš",ans:"y",sentence:"Na novou školu si rychle <strong>zv_kneš</strong>.",kind:"vyjmenovana",level:2,rule:"Zvykat si je vyjmenované slovo po V."},
+  {letter:"V",before:"žv",after:"kat",ans:"ý",sentence:"Ve škole se nesmí při hodině <strong>žv_kat</strong>.",kind:"vyjmenovana",level:1,rule:"Žvýkat je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"dra",ans:"y",sentence:"V čisté řece plave <strong>v_dra</strong>.",kind:"vyjmenovana",level:1,rule:"Vydra je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"r",ans:"ý",sentence:"Na větvi seděl <strong>v_r</strong> velký.",kind:"vyjmenovana",level:1,rule:"Výr (sova) je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"r",ans:"í",sentence:"V řece se vytvořil nebezpečný vodní <strong>v_r</strong>.",kind:"dvojice",level:2,rule:"Vír je vodní proud; výr je druh sovy."},
+  {letter:"V",before:"pov",after:"k",ans:"y",sentence:"Na hřišti nastal velký <strong>pov_k</strong>.",kind:"vyjmenovana",level:2,rule:"Povyk je vyjmenované slovo po V."},
+  {letter:"V",before:"v",after:"tr",ans:"í",sentence:"Za oknem foukal silný <strong>v_tr</strong>.",kind:"nevyjmenovana",level:1,rule:"Vítr není vyjmenované slovo."},
+  {letter:"V",before:"v",after:"la",ans:"í",sentence:"Na louce tančila pohádková <strong>v_la</strong>.",kind:"nevyjmenovana",level:1,rule:"Víla se píše s měkkým í."},
+  {letter:"V",before:"v",after:"dět",ans:"i",sentence:"Chci <strong>v_dět</strong> nové štěně.",kind:"nevyjmenovana",level:1,rule:"Vidět se píše s měkkým i."},
+  {letter:"V",before:"v",after:"dle",ans:"i",sentence:"Na půdě leží staré <strong>v_dle</strong>.",kind:"nevyjmenovana",level:2,rule:"Vidle se píše s měkkým i."},
+  {letter:"V",before:"v",after:"set",ans:"i",sentence:"Prádlo musí na šňůře <strong>v_set</strong>.",kind:"nevyjmenovana",level:2,rule:"Viset se píše s měkkým i."},
+  {letter:"V",before:"v",after:"skat",ans:"í",sentence:"Maminka bude dcerce <strong>v_skat</strong> jemně ve vlasech.",kind:"nevyjmenovana",level:3,rule:"Vískat (probírat se někomu ve vlasech) se píše s měkkým í."},
+  {letter:"V",before:"v",after:"sel",ans:"y",sentence:"Na jaře <strong>v_sel</strong> hrách na záhon.",kind:"dvojice",level:3,rule:"Vysel (zasel) souvisí se slovesem sít; visel znamená být zavěšený."},
 
-      const now = audioCtx.currentTime;
-      if (type === 'success') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(523.25, now);
-        osc.frequency.setValueAtTime(659.25, now + 0.1);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-      } else {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.linearRampToValueAtTime(160, now + 0.25);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      }
+  {letter:"V",before:"v",after:"chřice",ans:"i",sentence:"V noci udeřila silná <strong>v_chřice</strong>.",kind:"nevyjmenovana",level:2,rule:"Vichřice se píše s měkkým i."},
+  {letter:"V",before:"v",after:"dlička",ans:"i",sentence:"Na stole ležela malá <strong>v_dlička</strong>.",kind:"nevyjmenovana",level:1,rule:"Vidlička se píše s měkkým i."},
+  {letter:"V",before:"v",after:"nout",ans:"i",sentence:"Řeka se začala <strong>v_nout</strong> mezi kameny.",kind:"nevyjmenovana",level:2,rule:"Vínout není správný tvar; správně je vinout se s měkkým i."},
+
+  // Z
+  {letter:"Z",before:"brz",after:"",ans:"y",sentence:"Přijď <strong>brz_</strong> domů, ať nezmokneš!",kind:"vyjmenovana",level:1,rule:"Brzy je vyjmenované slovo po Z."},
+  {letter:"Z",before:"brz",after:"čko",ans:"i",sentence:"Ráno jsme vstali <strong>brz_čko</strong>.",kind:"nevyjmenovana",level:2,rule:"Brzičko je zdrobnělý příslovečný tvar; píše se s měkkým i."},
+  {letter:"Z",before:"jaz",after:"k",ans:"y",sentence:"Český <strong>jaz_k</strong> je velmi bohatý.",kind:"vyjmenovana",level:1,rule:"Jazyk je vyjmenované slovo po Z."},
+  {letter:"Z",before:"naz",after:"vat",ans:"ý",sentence:"Jak se bude naše ulice <strong>naz_vat</strong>?",kind:"vyjmenovana",level:2,rule:"Nazývat je vyjmenované slovo po Z."},
+  {letter:"Z",before:"z",after:"mě",ans:"i",sentence:"V <strong>z_mě</strong> padá sníh a mrzne.",kind:"nevyjmenovana",level:1,rule:"Zima není vyjmenované slovo."},
+  {letter:"Z",before:"z",after:"vat",ans:"í",sentence:"Když jsi unavený, začneš <strong>z_vat</strong>.",kind:"nevyjmenovana",level:1,rule:"Zívat není vyjmenované slovo."},
+  {letter:"Z",before:"z",after:"třek",ans:"í",sentence:"Těším se na <strong>z_třek</strong>.",kind:"nevyjmenovana",level:2,rule:"Zítřek se píše s měkkým í."},
+  {letter:"Z",before:"z",after:"sku",ans:"i",sentence:"Poctivou prací můžeme dosáhnout <strong>z_sku</strong>.",kind:"nevyjmenovana",level:2,rule:"Zisk se píše s měkkým i."},
+  {letter:"Z",before:"Zb",after:"něk",ans:"y",sentence:"<strong>Zb_něk</strong> je chlapec z vedlejší třídy.",kind:"vyjmenovana",level:3,rule:"Zbyněk je vlastní jméno zařazované mezi vyjmenovaná slova po Z."},
+  {letter:"Z",before:"Ruz",after:"ně",ans:"y",sentence:"Letiště Václava Havla leží v pražské <strong>Ruz_ně</strong>.",kind:"vyjmenovana",level:3,rule:"Ruzyně je vlastní jméno zařazované mezi vyjmenovaná slova po Z."}
+];
+
+// Ochrana proti chybným záznamům: informační položky bez doplňovaného písmene se nehrají.
+const PLAYABLE_WORDS = WORD_BANK.filter(w => w.ans && w.before !== undefined && w.after !== undefined);
+const $ = id => document.getElementById(id);
+let mode = "practice";
+let letter = "ALL";
+let current = null;
+let stars = Number.parseInt(localStorage.getItem("hravaCestinaStars") || "0", 10);
+if (!Number.isFinite(stars) || stars < 0) stars = 0;
+let soundOn = true;
+let audioContext = null;
+let challenge = [];
+let challengeIndex = 0;
+let challengeCorrect = 0;
+let challengeMistakes = [];
+let activeChallengeLength = 0;
+let answered = false;
+let wrongCounts = {};
+let previousPracticeId = null;
+
+const starCount = $("starCount");
+const homeScreen = $("homeScreen");
+const gameWrapper = $("gameWrapper");
+const quiz = $("quiz");
+const summary = $("summary");
+const progress = $("progress");
+const feedback = $("feedback");
+const nextBtn = $("nextBtn");
+const opt1 = $("opt1");
+const opt2 = $("opt2");
+const buttons = [opt1,opt2];
+starCount.textContent = stars;
+
+function saveStars(){
+  try { localStorage.setItem("hravaCestinaStars", String(stars)); } catch(e) {}
+  starCount.textContent = stars;
+}
+function playSound(type){
+  if(!soundOn) return;
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if(!AudioCtx) return;
+  try{
+    if(!audioContext) audioContext = new AudioCtx();
+    if(audioContext.state === "suspended") audioContext.resume();
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    osc.connect(gain); gain.connect(audioContext.destination);
+    const now = audioContext.currentTime;
+    if(type === "success"){
+      osc.type="sine"; osc.frequency.setValueAtTime(523.25,now);
+      osc.frequency.setValueAtTime(659.25,now+.1);
+      gain.gain.setValueAtTime(.12,now); gain.gain.exponentialRampToValueAtTime(.001,now+.3);
+      osc.start(now); osc.stop(now+.3);
+    }else{
+      osc.type="triangle"; osc.frequency.setValueAtTime(220,now);
+      osc.frequency.linearRampToValueAtTime(160,now+.22);
+      gain.gain.setValueAtTime(.1,now); gain.gain.exponentialRampToValueAtTime(.001,now+.25);
+      osc.start(now); osc.stop(now+.25);
     }
-
-    soundToggleBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      soundToggleBtn.textContent = soundEnabled ? '🔊' : '🔇';
+  }catch(e){ /* Zvuk je doplněk; hra musí fungovat i bez něj. */ }
+}
+function shuffle(items){
+  const a=[...items];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function filteredWords(){
+  const level = Number($("levelSelect").value);
+  const category = $("categorySelect").value;
+  return PLAYABLE_WORDS.filter(w =>
+    (letter === "ALL" || w.letter === letter) &&
+    (w.level <= level) &&
+    (category === "all" || (category === "dvojice" ? w.kind === "dvojice" : category === "vyjmenovana" ? w.kind === "vyjmenovana" : category === "pribuzna" ? ["pribuzna","tvar"].includes(w.kind) : w.kind === "nevyjmenovana"))
+  );
+}
+function showEmptyState(){
+  $("wordDisplay").textContent = "Zkus jiný výběr 🙂";
+  $("sentence").textContent = "Pro tuto kombinaci obtížnosti a okruhu zatím nejsou připravené otázky.";
+  $("options").style.display="none";
+  feedback.className="feedback show";
+  $("feedbackTitle").textContent="Nic se neděje!";
+  $("feedbackText").textContent="Změň obtížnost, písmeno nebo druh procvičování.";
+  nextBtn.classList.remove("show");
+}
+function renderWord(word){
+  current=word; answered=false;
+  feedback.className="feedback";
+  $("feedbackTitle").textContent="";
+  $("feedbackText").textContent="";
+  nextBtn.classList.remove("show");
+  $("options").style.display="grid";
+  buttons.forEach(b=>{b.disabled=false;b.className="option";});
+  const correctPair = ["a","e"].includes(word.ans) ? [word.ans, word.ans] : (["ý","í"].includes(word.ans) ? ["ý","í"] : ["y","i"]);
+  // V této aplikaci se procvičuje i/y, včetně dlouhých variant.
+  const pair = ["ý","í"].includes(word.ans) ? ["ý","í"] : ["y","i"];
+  const displayPair = shuffle(pair);
+  buttons.forEach((b,i)=>{b.textContent=displayPair[i];b.dataset.value=displayPair[i];});
+  $("wordDisplay").innerHTML = `${escapeHtml(word.before)}<span class="blank" id="blank">&nbsp;</span>${escapeHtml(word.after)}`;
+  $("sentence").innerHTML = word.sentence;
+  $("sentence").setAttribute("aria-label",word.sentence.replace(/<[^>]*>/g,"").replace("_","chybějící písmeno"));
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function choosePracticeWord(){
+  const pool=filteredWords();
+  if(!pool.length){showEmptyState();return;}
+  // Slova, ve kterých dítě chybovalo, dostávají vyšší šanci na opakování.
+  const weighted=[];
+  pool.forEach(w=>{
+    const weight=1+(wrongCounts[w.before+"_"+w.ans+w.after]||0)*2;
+    for(let i=0;i<Math.min(weight,7);i++) weighted.push(w);
+  });
+  let next=weighted[Math.floor(Math.random()*weighted.length)];
+  if(pool.length>1 && next===current){
+    const alternatives=pool.filter(w=>w!==current);
+    next=alternatives[Math.floor(Math.random()*alternatives.length)];
+  }
+  previousPracticeId=next;
+  renderWord(next);
+}
+function startChallenge(){
+  const pool=shuffle(filteredWords());
+  if(!pool.length){showEmptyState();return;}
+  activeChallengeLength=Math.min(10,pool.length);
+  challenge=pool.slice(0,activeChallengeLength);
+  challengeIndex=0;challengeCorrect=0;challengeMistakes=[];
+  summary.classList.remove("show");quiz.style.display="flex";
+  progress.style.display="flex";
+  $("options").style.display="grid";
+  loadChallengeWord();
+}
+function loadChallengeWord(){
+  if(challengeIndex>=activeChallengeLength){showSummary();return;}
+  $("counter").textContent=`Otázka ${challengeIndex+1} / ${activeChallengeLength}`;
+  $("score").textContent=`Správně: ${challengeCorrect}`;
+  $("progressFill").style.width=`${(challengeIndex/activeChallengeLength)*100}%`;
+  renderWord(challenge[challengeIndex]);
+}
+function handleAnswer(value,button){
+  if(answered || !current) return;
+  answered=true;
+  const correct=value===current.ans;
+  const blank=$("blank");
+  if(blank){blank.textContent=current.ans;blank.classList.add(correct?"correct":"wrong");}
+  buttons.forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.value===current.ans)b.classList.add("good");
+  });
+  const fullWord=current.before+current.ans+current.after;
+  if(correct){
+    playSound("success");stars++;saveStars();
+    feedback.className="feedback success show";
+    $("feedbackTitle").textContent=`✅ Skvěle! (${kindLabel(current.kind)})`;
+    $("feedbackText").textContent=current.rule;
+    if(mode==="challenge")challengeCorrect++;
+  }else{
+    playSound("error");button.classList.add("bad");
+    wrongCounts[fullWord]=(wrongCounts[fullWord]||0)+1;
+    feedback.className="feedback error show";
+    $("feedbackTitle").textContent=`❌ Správně je „${fullWord}“.`;
+    $("feedbackText").textContent=`${kindLabel(current.kind)}: ${current.rule}`;
+    if(mode==="challenge")challengeMistakes.push({word:fullWord,chosen:value,rule:current.rule});
+  }
+  // Doplnění se promítne i do věty, aby dítě vidělo správný tvar v kontextu.
+  $("sentence").innerHTML=current.sentence.replace("_",current.ans);
+  if(mode==="challenge"){
+    challengeIndex++;
+    $("score").textContent=`Správně: ${challengeCorrect}`;
+    $("progressFill").style.width=`${(challengeIndex/activeChallengeLength)*100}%`;
+    nextBtn.textContent=challengeIndex>=activeChallengeLength?"Zobrazit výsledky 🏆":"Další slovo ➔";
+  }else nextBtn.textContent="Další slovo ➔";
+  nextBtn.classList.add("show");
+}
+function kindLabel(kind){
+  return ({vyjmenovana:"Vyjmenované slovo",pribuzna:"Slovo příbuzné",tvar:"Tvar vyjmenovaného slova",nevyjmenovana:"Nevyjmenované slovo",dvojice:"Významová dvojice"})[kind]||"Pravopis";
+}
+function showSummary(){
+  quiz.style.display="none";summary.classList.add("show");
+  $("finalScore").textContent=`${challengeCorrect}/${activeChallengeLength}`;
+  if(challengeCorrect===activeChallengeLength)$("summaryMessage").textContent="Fantastické! Všechno správně! 🌟";
+  else if(challengeCorrect>=Math.ceil(activeChallengeLength*.7))$("summaryMessage").textContent="Velmi dobrá práce! Projdi si chyby a zkus to znovu.";
+  else $("summaryMessage").textContent="Každá chyba je příležitost se něco naučit. Zkus si projít slova níže.";
+  const list=$("mistakes");list.replaceChildren();
+  if(challengeMistakes.length){
+    const heading=document.createElement("strong");heading.textContent="Co si ještě procvičit:";list.appendChild(heading);
+    challengeMistakes.forEach(m=>{
+      const item=document.createElement("div");item.className="mistake";
+      const strong=document.createElement("strong");strong.textContent=m.word;
+      item.append(strong,document.createTextNode(` (zvoleno „${m.chosen}“) – ${m.rule}`));list.appendChild(item);
     });
+  }else{
+    const perfect=document.createElement("p");perfect.textContent="Bez jediné chyby. Jen tak dál!";list.appendChild(perfect);
+  }
+}
+function startPractice(){
+  progress.style.display="none";summary.classList.remove("show");quiz.style.display="flex";choosePracticeWord();
+}
+function openGame(){
+  homeScreen.style.display="none";gameWrapper.style.display="flex";
+  mode="practice";
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.toggle("active",b.dataset.mode==="practice"));
+  startPractice();
+}
+function goHome(){
+  gameWrapper.style.display="none";homeScreen.style.display="flex";
+  // Skóre se záměrně neresetuje.
+}
+$("startApp").addEventListener("click",openGame);
+$("homeLogo").addEventListener("click",goHome);
+$("soundToggle").addEventListener("click",()=>{
+  soundOn=!soundOn;$("soundToggle").textContent=soundOn?"🔊":"🔇";
+  $("soundToggle").setAttribute("aria-label",soundOn?"Vypnout zvuk":"Zapnout zvuk");
+});
+document.querySelectorAll(".mode-btn").forEach(btn=>btn.addEventListener("click",()=>{
+  mode=btn.dataset.mode;
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.toggle("active",b===btn));
+  if(mode==="challenge")startChallenge();else startPractice();
+}));
+document.querySelectorAll(".letter").forEach(btn=>btn.addEventListener("click",()=>{
+  letter=btn.dataset.letter;
+  document.querySelectorAll(".letter").forEach(b=>b.classList.toggle("active",b===btn));
+  if(mode==="challenge")startChallenge();else startPractice();
+}));
+$("levelSelect").addEventListener("change",()=>mode==="challenge"?startChallenge():startPractice());
+$("categorySelect").addEventListener("change",()=>mode==="challenge"?startChallenge():startPractice());
+buttons.forEach(btn=>btn.addEventListener("click",()=>handleAnswer(btn.dataset.value,btn)));
+nextBtn.addEventListener("click",()=>{
+  if(mode==="challenge")loadChallengeWord();else choosePracticeWord();
+});
+$("restart").addEventListener("click",startChallenge);
 
-    homeLogoLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      gameAppWrapper.style.display = 'none';
-      homeScreen.style.display = 'flex';
-      stars = 0;
-      starCountEl.textContent = stars;
-    });
-
-    startAppBtn.addEventListener('click', () => {
-      homeScreen.style.display = 'none';
-      gameAppWrapper.style.display = 'flex';
-      loadNextWord();
-    });
-
-    function getFilteredWords() {
-      if (currentLetter === 'ALL') return [...WORD_BANK];
-      return WORD_BANK.filter(w => w.letter === currentLetter);
-    }
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    function startChallenge() {
-      const pool = shuffle(getFilteredWords());
-      challengePool = [];
-      while (challengePool.length < CHALLENGE_LENGTH) {
-        challengePool.push(...shuffle([...pool]));
-      }
-      challengePool = challengePool.slice(0, CHALLENGE_LENGTH);
-      challengeIndex = 0;
-      challengeCorrect = 0;
-      challengeMistakes = [];
-      summaryScreen.classList.remove('show');
-      quizArea.style.display = 'flex';
-      progressWrap.style.display = 'flex';
-      loadNextWord();
-    }
-
-    function loadNextWord() {
-      feedbackBox.className = 'feedback-box';
-      nextBtn.classList.remove('show');
-      
-      [opt1, opt2].forEach(btn => {
-        btn.disabled = false;
-        btn.className = 'option-btn';
-      });
-
-      if (currentMode === 'challenge') {
-        if (challengeIndex >= CHALLENGE_LENGTH) {
-          showChallengeSummary();
-          return;
-        }
-        currentWord = challengePool[challengeIndex];
-        questionCounterEl.textContent = `Otázka ${challengeIndex + 1} / ${CHALLENGE_LENGTH}`;
-        challengeScoreEl.textContent = `Správně: ${challengeCorrect}`;
-        progressFillEl.style.width = `${(challengeIndex / CHALLENGE_LENGTH) * 100}%`;
-      } else {
-        progressWrap.style.display = 'none';
-        const pool = getFilteredWords();
-        let next;
-        do {
-          next = pool[Math.floor(Math.random() * pool.length)];
-        } while (pool.length > 1 && next === currentWord);
-        currentWord = next;
-      }
-
-      opt1.textContent = currentWord.pair[0];
-      opt1.dataset.val = currentWord.pair[0];
-      opt2.textContent = currentWord.pair[1];
-      opt2.dataset.val = currentWord.pair[1];
-
-      wordDisplayEl.innerHTML = `${currentWord.before}<span class="blank" id="blankSlot">&nbsp;</span>${currentWord.after}`;
-      sentenceHintEl.innerHTML = currentWord.sentence;
-    }
-
-    function handleAnswer(selectedVal, clickedBtn) {
-      const isCorrect = selectedVal === currentWord.ans;
-      const blankSlot = document.getElementById('blankSlot');
-      blankSlot.textContent = currentWord.ans;
-
-      [opt1, opt2].forEach(btn => {
-        btn.disabled = true;
-        if (btn.dataset.val === currentWord.ans) {
-          btn.classList.add('btn-correct');
-        }
-      });
-
-      if (isCorrect) {
-        blankSlot.classList.add('correct');
-        playSound('success');
-        stars++;
-        starCountEl.textContent = stars;
-
-        feedbackBox.className = 'feedback-box success show';
-        feedbackTitle.innerHTML = `✅ Skvěle! (${currentWord.type})`;
-        feedbackDesc.textContent = currentWord.rule;
-
-        if (currentMode === 'challenge') {
-          challengeCorrect++;
-          challengeScoreEl.textContent = `Správně: ${challengeCorrect}`;
-        }
-      } else {
-        clickedBtn.classList.add('btn-wrong');
-        blankSlot.classList.add('wrong');
-        playSound('error');
-
-        feedbackBox.className = 'feedback-box error show';
-        feedbackTitle.innerHTML = `❌ Pozor, správně je „${currentWord.before}${currentWord.ans}${currentWord.after}“`;
-        feedbackDesc.textContent = `${currentWord.type}: ${currentWord.rule}`;
-
-        if (currentMode === 'challenge') {
-          challengeMistakes.push({
-            word: `${currentWord.before}${currentWord.ans}${currentWord.after}`,
-            chosen: selectedVal,
-            rule: currentWord.rule
-          });
-        }
-      }
-
-      if (currentMode === 'challenge') {
-        challengeIndex++;
-        progressFillEl.style.width = `${(challengeIndex / CHALLENGE_LENGTH) * 100}%`;
-        nextBtn.textContent = challengeIndex >= CHALLENGE_LENGTH ? 'Zobrazit výsledky 🏆' : 'Další slovo ➔';
-      } else {
-        nextBtn.textContent = 'Další slovo ➔';
-      }
-
-      nextBtn.classList.add('show');
-    }
-
-    function showChallengeSummary() {
-      quizArea.style.display = 'none';
-      summaryScreen.classList.add('show');
-      finalScoreEl.textContent = `${challengeCorrect}/${CHALLENGE_LENGTH}`;
-
-      if (challengeCorrect === 10) {
-        summaryMessageEl.textContent = 'Absolutní jednička! Jsi mistr vyjmenovaných slov! 🌟';
-      } else if (challengeCorrect >= 7) {
-        summaryMessageEl.textContent = 'Velmi dobrá práce! Už ti chybí jen kousek k dokonalosti.';
-      } else {
-        summaryMessageEl.textContent = 'Dobrý trénink! Zkus si projít chybičky níže a dej si další kolo.';
-      }
-
-      mistakesListEl.innerHTML = '';
-      if (challengeMistakes.length > 0) {
-        const title = document.createElement('div');
-        title.style.fontWeight = '700';
-        title.style.marginTop = '4px';
-        title.textContent = 'Co si ještě procvičit:';
-        mistakesListEl.appendChild(title);
-
-        challengeMistakes.forEach(m => {
-          const item = document.createElement('div');
-          item.className = 'mistake-item';
-          item.innerHTML = `<strong>${m.word}</strong> (zvoleno <em>${m.chosen}</em>) – ${m.rule}`;
-          mistakesListEl.appendChild(item);
-        });
-      }
-    }
-
-    [opt1, opt2].forEach(btn => {
-      btn.addEventListener('click', () => handleAnswer(btn.dataset.val, btn));
-    });
-
-    nextBtn.addEventListener('click', loadNextWord);
-    restartBtn.addEventListener('click', startChallenge);
-
-    modeBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        modeBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentMode = btn.dataset.mode;
-        if (currentMode === 'challenge') {
-          startChallenge();
-        } else {
-          summaryScreen.classList.remove('show');
-          quizArea.style.display = 'flex';
-          loadNextWord();
-        }
-      });
-    });
-
-    letterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        letterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentLetter = btn.dataset.letter;
-        if (currentMode === 'challenge') {
-          startChallenge();
-        } else {
-          loadNextWord();
-        }
-      });
-    });
-  </script>
+// Kontrola dat při načtení: žádná hratelná položka nesmí mít neplatnou odpověď.
+const invalidItems=PLAYABLE_WORDS.filter(w=>!["y","i","ý","í"].includes(w.ans)||!w.sentence.includes("_"));
+if(invalidItems.length)console.warn("Zkontroluj položky WORD_BANK:",invalidItems);
+</script>
 </body>
 </html>
